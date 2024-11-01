@@ -12,12 +12,8 @@ CNumber::CNumber() {
 }
 
 //  Destruktor
-CNumber::~CNumber() {                                    //  TODO: zapytaj o co chodzi
-     //if (pi_number == NULL) {
-       // delete [] pi_number;
-     //}
-    //std::cout << "CNumber::~CNumber()" << std::endl;
-}
+CNumber::~CNumber() {}                                    //  TODO: zapytaj o co chodzi
+
 
 //  --  Gettery i settery ----------------------------------------------------------------------------------------------
 
@@ -282,13 +278,7 @@ CNumber CNumber::operator%(const CNumber &pcNewVal) {
 
     c_temp = *this / pcNewVal;
 
-    //std::cout << "iloraz: " << c_temp.sToStr() << std::endl;
-
-
     pcOtherCopy = pcNewVal;
-
-    //std::cout << "pierwsza wartosc: " << this->sToStr() << std::endl;
-    //std::cout << "druga wartosc: " << pcOtherCopy.sToStr() << std::endl;
 
     c_result = *this - (pcOtherCopy * c_temp);
 
