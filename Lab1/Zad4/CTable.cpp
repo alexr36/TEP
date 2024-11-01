@@ -23,12 +23,7 @@ CTable::CTable(std::string sName, int iTableLen) {
 CTable::CTable(const CTable &pcOther) {
     s_name = pcOther.s_name + "_copy";
     i_table_len = pcOther.i_table_len;
-    //pi_table = new int[i_table_len];
-
-    //for (int i = 0; i < i_table_len; i++) {
-    //    pi_table[i] = pcOther.pi_table[i];
-    //}
-
+    
     pi_table = pi_copy_table_contents(i_table_len, pcOther.piGetPointer());
 
     std::cout << "kopiuj:\t'" << pcOther.s_name << "'" << std::endl;
@@ -50,16 +45,12 @@ void CTable::setName(std::string sName) {
 bool CTable::bSetNewSize(int iTableLen) {
     if (iTableLen <= 0) return false;
 
-   // pi_table = new int[i_table_len];
     int* new_table = pi_copy_table_contents(i_table_len, pi_table);
     delete[] pi_table;
 
-    pi_table = new_table; //pi_copy_table_contents(i_table_len, pi_table);
-
+    pi_table = new_table;
     i_table_len = iTableLen;
-
-    //delete[] pi_table;
-
+    
     return true;
 }
 
@@ -95,9 +86,7 @@ int* CTable::pi_copy_table_contents(int iTableLen, int pi_table[]) {
     for (int i = 0; i < i_table_len; i++) {
         pi_table_copy[i] = pi_table[i];
     }
-
-    //delete[] pi_table;
-
+    
     return pi_table_copy;
 }
 
