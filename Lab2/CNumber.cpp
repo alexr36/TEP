@@ -1,7 +1,5 @@
 #include "CNumber.h"
-
 #include <iostream>
-
 #include "constants.h"
 
 //  Konstruktor domyślny
