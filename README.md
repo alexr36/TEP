@@ -1,0 +1,2 @@
+# TEP
+Techniki efektywnego programowania
