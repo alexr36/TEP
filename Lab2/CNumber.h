@@ -25,12 +25,6 @@ class CNumber {
         CNumber operator/(int iNewVal);                     //  Operator dzielenia
         CNumber operator%(int iNewVal);                     //  Operator modulo
 
-        //  Pozostałe metody
-        std::string sToStr();                                                         //  Wypisywanie stanu obiektu na ekran
-        bool bIsGreaterOrEqual(const CNumber &pcNumber1, const CNumber &pcNumber2);   //  Sprawdzanie, czy liczba jest więsza niż lub równa
-        bool bIsGreater(const CNumber &pcNumber1, const CNumber &pcNumber2);          //  Sprawdzanie, czy liczba jest większa niż
-        bool bCheckIfZero(const CNumber &pcNumber);         //  Sprawdzanie czy liczba jest równa zero
-
         //  --  Gettery i settery   ------------------------------------------------------------------------------------
         void vSetLength(int iNewLength);
         void vSetIsNegative(bool bIsNegative);
@@ -39,6 +33,12 @@ class CNumber {
         int iGetLength();
         bool bIsNegative();
         int* piGetNumber();
+
+        //  Pozostałe metody
+        std::string sToStr();                                                         //  Wypisywanie stanu obiektu na ekran
+        bool bIsGreaterOrEqual(const CNumber &pcNumber1, const CNumber &pcNumber2);   //  Sprawdzanie, czy liczba jest więsza niż lub równa
+        bool bIsGreater(const CNumber &pcNumber1, const CNumber &pcNumber2);          //  Sprawdzanie, czy liczba jest większa niż
+        bool bCheckIfZero(const CNumber &pcNumber);                                   //  Sprawdzanie czy liczba jest równa zero
 
     private:
         void removeLeadingZeros();                          //  Usuwanie zer wiodących
