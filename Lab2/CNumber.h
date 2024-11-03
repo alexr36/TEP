@@ -10,15 +10,15 @@ class CNumber {
         //  --  Operatory   --------------------------------------------------------------------------------------------
 
         //  Dla obiektów klasy
-        void operator=(const CNumber &pcNewVal);             //  Operator przypisania
-        CNumber operator+(const CNumber &pcNewVal);       //  Operator dodawania
-        CNumber operator-(const CNumber &pcNewVal);       //  Operator odejmowania
-        CNumber operator*(const CNumber &pcNewVal);       //  Operator mnożenia
-        CNumber operator/(const CNumber &pcNewVal);       //  Operator dzielenia
-        CNumber operator%(const CNumber &pcNewVal);       //  Operator modulo
+        void operator=(const CNumber &pcNewVal);            //  Operator przypisania
+        CNumber operator+(const CNumber &pcNewVal);         //  Operator dodawania
+        CNumber operator-(const CNumber &pcNewVal);         //  Operator odejmowania
+        CNumber operator*(const CNumber &pcNewVal);         //  Operator mnożenia
+        CNumber operator/(const CNumber &pcNewVal);         //  Operator dzielenia
+        CNumber operator%(const CNumber &pcNewVal);         //  Operator modulo
 
         //  Dla liczb całkowitych
-        void operator=(int iNewVal);                         //  Operator przypisania
+        void operator=(int iNewVal);                        //  Operator przypisania
         CNumber operator+(int iNewVal);                     //  Operator dodawania
         CNumber operator-(int iNewVal);                     //  Operator odejmowania
         CNumber operator*(int iNewVal);                     //  Operator mnożenia
@@ -26,13 +26,10 @@ class CNumber {
         CNumber operator%(int iNewVal);                     //  Operator modulo
 
         //  Pozostałe metody
-        std::string sToStr();                               //  Wypisywanie stanu obiektu na ekran
-        void removeLeadingZeros();                          //  Usuwanie zer wiodących
-        void normalizeZeroSign(CNumber &pcNumber);          //  Jeśli wynik jest zerem, to jego znak jest dodatni
+        std::string sToStr();                                                         //  Wypisywanie stanu obiektu na ekran
+        bool bIsGreaterOrEqual(const CNumber &pcNumber1, const CNumber &pcNumber2);   //  Sprawdzanie, czy liczba jest więsza niż lub równa
+        bool bIsGreater(const CNumber &pcNumber1, const CNumber &pcNumber2);          //  Sprawdzanie, czy liczba jest większa niż
         bool bCheckIfZero(const CNumber &pcNumber);         //  Sprawdzanie czy liczba jest równa zero
-        bool bIsGreaterOrEqual(const CNumber &pcNumber1, const CNumber &pcNumber2);   //  Sprawdzanie, czy liczba jest więsza lub równa
-        bool bIsGreater(const CNumber &pcNumber1, const CNumber &pcNumber2);          //  Sprawdzanie, czy liczba jest równa
-        bool bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool bGreaterOrEqual);    //  Porównanie liczb z flagą bGreaterOrEqual
 
         //  --  Gettery i settery   ------------------------------------------------------------------------------------
         void vSetLength(int iNewLength);
@@ -44,6 +41,10 @@ class CNumber {
         int* piGetNumber();
 
     private:
+        void removeLeadingZeros();                          //  Usuwanie zer wiodących
+        void normalizeZeroSign(CNumber &pcNumber);          //  Jeśli wynik jest zerem, to jego znak jest dodatni
+        bool bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool bGreaterOrEqual);    //  Porównanie liczb z flagą bGreaterOrEqual
+
         //  Pola klasy
         int i_length;                                       //  Długość liczby
         int* pi_number;                                     //  Wskaźnik na tablicę cyfr
