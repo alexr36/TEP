@@ -382,7 +382,7 @@ std::string CNumber::sToStr() {
 }
 
 //  Konwertowanie typu Integer na typ String
-std::string sIntToString(int i_number) {
+std::string CNumber::sIntToString(int i_number) {
     std::ostringstream oss_result;;             //  Strumień wyjściowy 
     oss_result << i_number;                     //  Dodanie liczby do strumienia
 
