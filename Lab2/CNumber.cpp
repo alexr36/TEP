@@ -1,6 +1,7 @@
 #include "CNumber.h"
 #include <iostream>
 #include "constants.h"
+#include <sstream>
 
 //  Konstruktor domyślny
 CNumber::CNumber() {
@@ -368,19 +369,24 @@ CNumber CNumber::operator%(const int iNewVal) {
 
 //  Wypisywanie stanu obiektu
 std::string CNumber::sToStr() {
-    // Inicjalizacja wynikowego napisu jako pusty ("")
-    std::string s_result = EMPTY_STRING;
+    std::string s_result = EMPTY_STRING;        // Inicjalizacja wynikowego napisu jako pusty ("")
 
-    //  Dodanie znaku "-", gdy liczba jest ujemna
-    if (b_is_negative) s_result += MINUS_SIGN;
+    if (b_is_negative) s_result += MINUS_SIGN;  //  Dodanie znaku "-", gdy liczba jest ujemna
 
     //  Dodanie każdej cyfry do wynikowego napisu
     for (int i = 0; i < i_length; i++) {
-        s_result += std::to_string(pi_number[i]);
+        s_result += sIntToString(pi_number[i]);
     }
 
-    //  Zwrócenie wyniku
-    return s_result;
+    return s_result;                            //  Zwrócenie wyniku
+}
+
+//  Konwertowanie typu Integer na typ String
+std::string sIntToString(int i_number) {
+    std::ostringstream oss_result;;             //  Strumień wyjściowy 
+    oss_result << i_number;                     //  Dodanie liczby do strumienia
+
+    return oss_result.str();                    //  Zwrócenie wyniku
 }
 
 //  Usuwanie zer wiodących
