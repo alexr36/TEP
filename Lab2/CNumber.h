@@ -44,6 +44,7 @@ class CNumber {
         void removeLeadingZeros();                          //  Usuwanie zer wiodących
         void normalizeZeroSign(CNumber &pcNumber);          //  Jeśli wynik jest zerem, to jego znak jest dodatni
         bool bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool bGreaterOrEqual);    //  Porównanie liczb z flagą bGreaterOrEqual
+        std::string sIntToString(int i_number);             // Konwetrowanie typu Integer na typ String
 
         //  Pola klasy
         int i_length;                                       //  Długość liczby
