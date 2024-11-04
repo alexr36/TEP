@@ -11,7 +11,9 @@ CNumber::CNumber() {
 }
 
 //  Destruktor
-CNumber::~CNumber() {}
+CNumber::~CNumber() {
+    pi_number = NULL;
+}
 
 //  --  Gettery i settery ----------------------------------------------------------------------------------------------
 
@@ -25,8 +27,10 @@ void CNumber::vSetIsNegative(bool bIsNegative) {
 }
 
 void CNumber::vSetNumber(int* piNewNumber) {
-    delete[] pi_number;
-    pi_number = piNewNumber;
+    if (pi_number != piNewNumber) {
+        delete[] pi_number;
+        pi_number = piNewNumber;
+    }
 }
 
 int CNumber::iGetLength() {
