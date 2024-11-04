@@ -35,16 +35,17 @@ class CNumber {
         int* piGetNumber();
 
         //  Pozostałe metody
-        std::string sToStr();                                                         //  Wypisywanie stanu obiektu na ekran
-        bool bIsGreaterOrEqual(const CNumber &pcNumber1, const CNumber &pcNumber2);   //  Sprawdzanie, czy liczba jest więsza niż lub równa
-        bool bIsGreater(const CNumber &pcNumber1, const CNumber &pcNumber2);          //  Sprawdzanie, czy liczba jest większa niż
-        bool bCheckIfZero(const CNumber &pcNumber);                                   //  Sprawdzanie czy liczba jest równa zero
+        std::string sToStr();                               //  Wypisywanie stanu obiektu na ekran
+        bool bCheckIfZero(const CNumber &pcNumber);         //  Sprawdzanie czy liczba jest równa zero
+        bool bIsGreaterOrEqual(const CNumber &pcNumber1, const CNumber &pcNumber2);   //  Sprawdzanie, czy liczba jest więsza lub równa
+        bool bIsGreater(const CNumber &pcNumber1, const CNumber &pcNumber2);          //  Sprawdzanie, czy liczba jest równa
 
     private:
+        bool bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool bGreaterOrEqual);    //  Porównanie liczb z flagą bGreaterOrEqual
         void removeLeadingZeros();                          //  Usuwanie zer wiodących
         void normalizeZeroSign(CNumber &pcNumber);          //  Jeśli wynik jest zerem, to jego znak jest dodatni
-        bool bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool bGreaterOrEqual);    //  Porównanie liczb z flagą bGreaterOrEqual
         std::string sIntToString(int i_number);             // Konwetrowanie typu Integer na typ String
+        void vPrintDivideByZeroInfo(const CNumber &pcNumber, CNumber &c_result);
 
         //  Pola klasy
         int i_length;                                       //  Długość liczby

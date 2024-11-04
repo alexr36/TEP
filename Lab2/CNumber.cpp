@@ -227,8 +227,7 @@ CNumber CNumber::operator/(const CNumber &pcNewVal) {
 
     //  Upewnienie się, że nie wykonuje się dzielenia przez zero
     if (bCheckIfZero(pcNewVal)) {
-        std::cout << "Dzielenie przez zero." << std::endl;
-        c_result.pi_number = NULL;
+        vPrintDivideByZeroInfo(pcNewVal, c_result);
         return c_result;
     }
 
@@ -277,8 +276,15 @@ CNumber CNumber::operator/(const CNumber &pcNewVal) {
 //  Operator modulo
 CNumber CNumber::operator%(const CNumber &pcNewVal) {
     CNumber c_result, c_temp, pcOtherCopy;
-    
+
+    //  Upewnienie się, że nie wykonuje się dzielenia przez zero
+    if (bCheckIfZero(pcNewVal)) {
+        vPrintDivideByZeroInfo(pcNewVal, c_result);
+        return c_result;
+    }
+
     pcOtherCopy = pcNewVal;
+
     c_temp = *this / pcNewVal;
     c_result = *this - (pcOtherCopy * c_temp);
 
@@ -385,13 +391,14 @@ std::string CNumber::sToStr() {
     return s_result;                            //  Zwrócenie wyniku
 }
 
-//  Konwertowanie typu Integer na typ String
+//  Konwetrowanie typu Integer na typ String
 std::string CNumber::sIntToString(int i_number) {
-    std::ostringstream oss_result;;             //  Strumień wyjściowy 
-    oss_result << i_number;                     //  Dodanie liczby do strumienia
+    std::ostringstream oss_result;
+    oss_result << i_number;
 
-    return oss_result.str();                    //  Zwrócenie wyniku
+    return oss_result.str();
 }
+
 
 //  Usuwanie zer wiodących
 void CNumber::removeLeadingZeros() {
@@ -451,3 +458,9 @@ bool CNumber::bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool 
     return bGreaterOrEqual;
 }
 
+void CNumber::vPrintDivideByZeroInfo(const CNumber &pcNumber, CNumber &c_result) {
+    if (bCheckIfZero(pcNumber)) {
+        std::cout << "Dzielenie przez zero: ";
+        c_result = INT_MIN;
+    }
+}

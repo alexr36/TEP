@@ -92,6 +92,9 @@ int main() {
     CNumber c_multiplication_test_6 = c_num_8 * (-20);          //  ((-15) * (-20) = 300)
     std::cout << c_multiplication_test_6.sToStr() << std::endl;
 
+    CNumber c_multiplication_test_7 = c_num_8 * 0;              //  ((-15) * 0 = 0)
+    std::cout << c_multiplication_test_7.sToStr() << std::endl;
+
     //  Testy dzielenia
     std::cout << "\nTesty dzielenia:" << std::endl;
 
@@ -131,6 +134,9 @@ int main() {
     CNumber c_division_test_9 = c_num_15 / c_num_14;            //  ((-300) / (-15) = 20)
     std::cout << c_division_test_9.sToStr() << std::endl;
 
+    CNumber c_division_test_10 = c_num_15 / 0;                  //  ((-300) / 0 = INT_MIN + error_message)
+    std::cout << c_division_test_10.sToStr() << std::endl;
+
     //  Testy dla modulo
     std::cout << "\nTesty dla modulo:" << std::endl;
 
@@ -162,6 +168,9 @@ int main() {
 
     CNumber c_modulo_test_7 = c_num_16 % 10;                    //  (5 % 10 = 5)
     std::cout << c_modulo_test_7.sToStr() << std::endl;
+
+    CNumber c_modulo_test_8 = c_num_16 % 0;                     //  (5 % 0 = INT_MIN + error_message)
+    std::cout << c_modulo_test_8.sToStr() << std::endl;
 
     return 0;
 }
