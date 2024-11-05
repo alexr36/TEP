@@ -1,45 +1,58 @@
 #ifndef CTREE_H
 #define CTREE_H
+#include <string>
 
 //  --  Klasa CNode ----------------------------------------------------------------------------------------------------
 class CNode {
-public:
-    CNode();                        //  Konstruktor domyślny
-    ~CNode();                       //  Destruktor
+    public:
+        CNode();                                    //  Konstruktor domyślny
+        CNode(const CNode &cnOther);                //  Konstruktor kopiujący
+        ~CNode();                                   //  Destruktor
 
-    //  --  Settery
-    void setValue(int value);
-    void addChild(CNode* child);
+        //  --  Settery -------------------------------------------------------------
+        void vSetValue(std::string sValue);
+        void vSetLeftChild(CNode* cnLeftChild);
+        void vSetRightChild(CNode* cnRightChild);
 
-    //  --  Gettery
-    int getValue();
-    CNode* getChild();
+        //  --  Gettery -------------------------------------------------------------
+        std::string sGetValue();
+        CNode* pcnGetLeftChild();
+        CNode* pcnGetRightChild();
+        CNode** pcnGetChildren();
 
-private:
-    CNode* left_child;              //  Lewe dziecko węzła
-    CNode* right_child;             //  Prawe dziecko węzła
-    CNode* next_sibling;            //  Następne w kolei rodzeństwo
-    char* node_value;               //  Wartość węzła
+        //  --  Pozostałe metody ----------------------------------------------------
+        void vAddChild(CNode* cnChild);             //  Dodawanie potomka do węzła
+
+    private:
+        //  Pola klasy
+        CNode* cn_left_child;                       //  Lewe dziecko węzła
+        CNode* cn_right_child;                      //  Prawe dziecko węzła
+        std::string s_node_value;                   //  Wartość węzła
+        int i_children_count;                       //  Licznik potomków węzła
+        CNode** pcn_children;                       //  Wskaźnik na tablicę dzieci
 };
 
 
 //  --  Klasa CTree ----------------------------------------------------------------------------------------------------
 class CTree {
     public:
-        CTree();                        //  Konstruktor domyślny
-        ~CTree();                       //  Destruktor
+        CTree();                                //  Konstruktor domyślny
+        CTree(const CTree &ctOther);            //  Konstruktor kopiujący
+        ~CTree();                               //  Destruktor
 
-    //  --  Operatory
-        void operator=(CTree &pcOther);         //  Operator przyrówania
-        CTree* operator+(CTree &pcOther);       //  Operator dodawania
+        //  --  Operatory   ---------------------------------------------------------
+        void operator=(const CTree &pctOther);         //  Operator przyrówania
+        CTree* operator+(const CTree &pctOther);       //  Operator dodawania
 
-    //  --  Settery
-        void setRoot(CTree* root);
+        //  --  Settery -------------------------------------------------------------
+        void setRoot(CNode* cnRoot);
 
-    //  --  Gettery
+        //  --  Gettery -------------------------------------------------------------
         CNode* getRoot();
 
     private:
-        CNode* root;                    //  Korzeń drzewa
+        //  Pola klasy
+        CNode* cn_root;                         //  Korzeń drzewa
+
 };
 #endif //CTREE_H
