@@ -5,6 +5,7 @@
 class CNumber {
     public:
         CNumber();                                          //  Konstruktor domyślny
+        CNumber(const CNumber &pcOther);                    //  Konstruktor kopiujący
         ~CNumber();                                         //  Destruktor
 
         //  --  Operatory   --------------------------------------------------------------------------------------------
@@ -24,6 +25,9 @@ class CNumber {
         CNumber operator*(int iNewVal);                     //  Operator mnożenia
         CNumber operator/(int iNewVal);                     //  Operator dzielenia
         CNumber operator%(int iNewVal);                     //  Operator modulo
+
+        //  Modyfikacja
+        CNumber operator^(int iDigitToRemove);              //  Operator usuwający w określone cyfry wiodące
 
         //  --  Gettery i settery   ------------------------------------------------------------------------------------
         void vSetLength(int iNewLength);
@@ -46,6 +50,7 @@ class CNumber {
         void normalizeZeroSign(CNumber &pcNumber);          //  Jeśli wynik jest zerem, to jego znak jest dodatni
         std::string sIntToString(int i_number);             // Konwetrowanie typu Integer na typ String
         void vPrintDivideByZeroInfo(const CNumber &pcNumber, CNumber &c_result);
+        void vCopyFrom(const CNumber &pcOther);
 
         //  Pola klasy
         int i_length;                                       //  Długość liczby

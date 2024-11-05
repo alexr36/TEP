@@ -5,13 +5,19 @@
 
 //  Konstruktor domyślny
 CNumber::CNumber() {
-    i_length = NUMBER_DEFAULT_LENGTH;
+    i_length = i_NUMBER_DEFAULT_LENGTH;
     pi_number = new int[i_length];
     b_is_negative = false;
 }
 
+//  Konstruktor kopiujący
+CNumber::CNumber(const CNumber &pcOther) {
+    vCopyFrom(pcOther);
+}
+
 //  Destruktor
 CNumber::~CNumber() {
+    //delete[] pi_number;
     pi_number = NULL;
 }
 
@@ -55,14 +61,7 @@ void CNumber::operator=(const CNumber &pcNewVal) {
 
     delete[] pi_number;                             //  Dealokacja nieużywanego obszaru pamięci
 
-    i_length = pcNewVal.i_length;                    //  Przypisanie odpowiedniej długości liczby
-    b_is_negative = pcNewVal.b_is_negative;          //  Oznaczenie znaku liczby
-
-    //  Kopiowanie cyfr i alokacja potrzebnej pamięci
-    pi_number = new int[i_length];
-    for (int i = 0; i < i_length; i++) {
-        pi_number[i] = pcNewVal.pi_number[i];
-    }
+    this->vCopyFrom(pcNewVal);
 }
 
 //  Operator dodawania
@@ -92,8 +91,8 @@ CNumber CNumber::operator+(const CNumber &pcNewVal) {
             int i_sum = i_digit_1 + i_digit_2 + i_carry;
 
             //  Pozbycie się nadmiaru (jeśli wartość i_sum wykracza poza 0-9)
-            c_result.pi_number[c_result.i_length - i - 1] = i_sum % NUMERIC_SYSTEM_BASE;
-            i_carry = i_sum / NUMERIC_SYSTEM_BASE;                          //  Obliczenie wartości przeniesienia
+            c_result.pi_number[c_result.i_length - i - 1] = i_sum % i_NUMERIC_SYSTEM_BASE;
+            i_carry = i_sum / i_NUMERIC_SYSTEM_BASE;                        //  Obliczenie wartości przeniesienia
 
         }
 
@@ -114,7 +113,7 @@ CNumber CNumber::operator+(const CNumber &pcNewVal) {
         }
     }
 
-    normalizeZeroSign(c_result);                                         // Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
+    normalizeZeroSign(c_result);                                         //  Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
     return c_result;                                                        //  Zwrócenie wyniku
 }
 
@@ -174,7 +173,7 @@ CNumber CNumber::operator-(const CNumber &pcNewVal) {
 
         //  Pozbycie się nadmiaru (jeśli wartość i_sub wykracza poza 0-9)
         if (i_sub < 0) {
-            i_sub += NUMERIC_SYSTEM_BASE;
+            i_sub += i_NUMERIC_SYSTEM_BASE;
             i_borrow = 1;
         }
         else i_borrow = 0;
@@ -209,8 +208,8 @@ CNumber CNumber::operator*(const CNumber &pcNewVal) {
             int i_digit_2 = (j < pcNewVal.i_length) ? pcNewVal.pi_number[pcNewVal.i_length - j - 1] : 0;
 
             int i_sum = c_result.pi_number[i_result_length - i - j - 1] + i_digit_1 * i_digit_2 + i_carry;
-            c_result.pi_number[i_result_length - i - j - 1] = i_sum % NUMERIC_SYSTEM_BASE;
-            i_carry = i_sum / NUMERIC_SYSTEM_BASE;
+            c_result.pi_number[i_result_length - i - j - 1] = i_sum % i_NUMERIC_SYSTEM_BASE;
+            i_carry = i_sum / i_NUMERIC_SYSTEM_BASE;
         }
     }
 
@@ -254,7 +253,7 @@ CNumber CNumber::operator/(const CNumber &pcNewVal) {
 
     //  Pętla przechodząca przez każdą cyfrę dzielnej
     for (int i = 0; i < c_dividend.i_length; i++) {
-        c_remainder = c_remainder * NUMERIC_SYSTEM_BASE + c_dividend.pi_number[i];      //  Obliczenie aktualnej reszty z dzielenia
+        c_remainder = c_remainder * i_NUMERIC_SYSTEM_BASE + c_dividend.pi_number[i];      //  Obliczenie aktualnej reszty z dzielenia
         int i_quotient_digit = 0;                                                       //  Inicjalizacja aktualnej cyfry ilorazu jako zero
 
         //  Pętla wykonuje się tak długo jak reszta jest większa lub równa dzielnikowi
@@ -307,7 +306,7 @@ void CNumber::operator=(const int iNewVal) {
     int i_normal_value_copy = iNewVal;                     //  Kopia służąca do podziału liczby na cyfry
 
     do {
-        i_digits_quantity_value_copy /= NUMERIC_SYSTEM_BASE;
+        i_digits_quantity_value_copy /= i_NUMERIC_SYSTEM_BASE;
         i_length++;
     }
     while (i_digits_quantity_value_copy != 0);
@@ -316,8 +315,8 @@ void CNumber::operator=(const int iNewVal) {
 
     //  Dodawanie cyfr to tablicy (od końca)
     for (int i = i_length - 1; i >= 0; i--) {
-        pi_number[i] = abs(i_normal_value_copy) % NUMERIC_SYSTEM_BASE;     //  Wartość absolutna, aby uniknąć powielania znaku "-"
-        i_normal_value_copy /= NUMERIC_SYSTEM_BASE;
+        pi_number[i] = abs(i_normal_value_copy) % i_NUMERIC_SYSTEM_BASE;     //  Wartość absolutna, aby uniknąć powielania znaku "-"
+        i_normal_value_copy /= i_NUMERIC_SYSTEM_BASE;
     }
 }
 
@@ -379,9 +378,9 @@ CNumber CNumber::operator%(const int iNewVal) {
 
 //  Wypisywanie stanu obiektu
 std::string CNumber::sToStr() {
-    std::string s_result = EMPTY_STRING;        // Inicjalizacja wynikowego napisu jako pusty ("")
+    std::string s_result = s_EMPTY_STRING;        // Inicjalizacja wynikowego napisu jako pusty ("")
 
-    if (b_is_negative) s_result += MINUS_SIGN;  //  Dodanie znaku "-", gdy liczba jest ujemna
+    if (b_is_negative) s_result += s_MINUS_SIGN;  //  Dodanie znaku "-", gdy liczba jest ujemna
 
     //  Dodanie każdej cyfry do wynikowego napisu
     for (int i = 0; i < i_length; i++) {
@@ -398,7 +397,6 @@ std::string CNumber::sIntToString(int i_number) {
 
     return oss_result.str();
 }
-
 
 //  Usuwanie zer wiodących
 void CNumber::removeLeadingZeros() {
@@ -461,6 +459,46 @@ bool CNumber::bCompare(const CNumber &pcNumber1, const CNumber &pcNumber2, bool 
 void CNumber::vPrintDivideByZeroInfo(const CNumber &pcNumber, CNumber &c_result) {
     if (bCheckIfZero(pcNumber)) {
         std::cout << "Dzielenie przez zero: ";
-        c_result = INT_MIN;
+        c_result = INT_MAX;
     }
+}
+
+//  Kopiowanie dokładnej wartości obiektu
+void CNumber::vCopyFrom(const CNumber &pcNewVal) {
+    i_length = pcNewVal.i_length;                    //  Przypisanie odpowiedniej długości liczby
+    b_is_negative = pcNewVal.b_is_negative;          //  Oznaczenie znaku liczby
+
+    //  Kopiowanie cyfr i alokacja potrzebnej pamięci
+    pi_number = new int[i_length];
+    for (int i = 0; i < i_length; i++) {
+        pi_number[i] = pcNewVal.pi_number[i];
+    }
+}
+
+//  --  Modyfikacja ----------------------------------------------------------------------------------------------------
+
+CNumber CNumber::operator^(int iDigitToRemove) {
+    CNumber c_result = *this;
+
+    //  Weryfikacja porpawości argumentu
+    if (iDigitToRemove < 0 || iDigitToRemove > 9) {
+        return c_result;
+    }
+
+    int i_new_length = c_result.i_length;
+
+    //  Przesunięcie cyfr w lewo
+    while (i_new_length > 1 && pi_number[0] == iDigitToRemove) {
+        for (int i = 0; i < i_new_length; i++) {
+            pi_number[i] = pi_number[i + 1];
+        }
+
+        i_new_length--;                                  //  Zmniejszenie długości liczby
+    }
+
+    c_result.i_length = i_new_length;                    //  Aktualizacja długości liczby
+
+    if (c_result.i_length == 1 && iDigitToRemove == pi_number[0]) c_result = 0;            //  Jeśli liczba składa się w całości z usuwanych cyfr to przypisujemy wynikowi wartość zero
+
+    return c_result;                                     //  Zwrócenie wyniku
 }

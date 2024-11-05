@@ -172,6 +172,74 @@ int main() {
     CNumber c_modulo_test_8 = c_num_16 % 0;                     //  (5 % 0 = INT_MIN + error_message)
     std::cout << c_modulo_test_8.sToStr() << std::endl;
 
+    //  Sprawdzenie poprawnosci operatorów:
+    std::cout << "\nSprawdzenie poprawnosci dzialania operatorow:\n";
+    CNumber c_test_379, c_test_999, c_test_m999, c_test_1000, c_test_22, c_test_m22, c_test_1, c_test_37, c_test_m11, c_test_m99, c_test_m2, c_test_121, c_test_3012, c_test_INT_MAX, c_test_364452, c_test_13, c_test_3448182, c_test_m123, c_test_m89998, c_test_m7777;
+    c_test_379 = 379;
+    c_test_999 = 999;
+    c_test_m999 = -999;
+    c_test_1000 = 1000;
+    c_test_22 = 22;
+    c_test_m22 = -22;
+    c_test_1 = 1;
+    c_test_37 = 37;
+    c_test_m11 = -11;
+    c_test_m99 = -99;
+    c_test_m2 = -2;
+    c_test_121 = 121;
+    c_test_3012 = 3012;
+    c_test_INT_MAX = INT_MAX;
+    c_test_364452 = 364452;
+    c_test_13 = 13;
+    c_test_3448182 = 3448182;
+    c_test_m123 = -123;
+    c_test_m89998 = -89998;
+    c_test_m7777 = -7777;
+
+    std::cout << (c_test_379 - c_test_999).sToStr() << "\n";                //  (379 - 999 / (-620)
+    std::cout << (c_test_379 + c_test_m999).sToStr() << "\n";               //  (379 + (-999) / (-620))
+    std::cout << (c_test_1000 - c_test_22).sToStr() << "\n";                //  (1000 - 22 = 978)
+    std::cout << (c_test_1000 + c_test_m22).sToStr() << "\n";               //  (1000 + (-22) = 978)
+    std::cout << (c_test_999 + c_test_1).sToStr() << "\n";                  //  (999 + 1 = 1000)
+    std::cout << (c_test_37 * c_test_m11).sToStr() << "\n";                 //  (37 * (-11) = (-407))
+    std::cout << (c_test_m99 * c_test_m2).sToStr() << "\n";                 //  ((-99) * (-2) = 198)
+    std::cout << (c_test_121 * c_test_3012).sToStr() << "\n";               //  (121 * 3012 = 364452)
+    std::cout << (c_test_INT_MAX * c_test_INT_MAX).sToStr() << "\n";        //  (INT_MAX * INT_MAX = approx(4.6117 * 10^18))
+    std::cout << (c_test_364452 / c_test_13).sToStr() << "\n";              //  (364452 / 13 = 28034)
+    std::cout << (c_test_3448182 / c_test_m123).sToStr() << "\n";           //  (3448182 / (-123) = (-28034))
+    std::cout << (c_test_m89998 / c_test_m7777).sToStr() << "\n";           //  ((-89998) / (-7777) = 11)
+
+    //  Modyfikacja
+    std::cout << "\nTesty dla modyfikacji:\n";
+
+    CNumber c_num_21, c_num_22, c_num_23, c_num_24, c_num_25, c_num_26;
+    c_num_21 = 33012;
+    c_num_22 = 4124;
+    c_num_23 = 1921;
+    c_num_24 = 3471;
+    c_num_25 = 9;
+    c_num_26 = 333;
+
+    CNumber c_mod_test_1 = c_num_21 ^ 3;                    //  (33012 ^ 3 = 012)
+    std::cout << c_mod_test_1.sToStr() << "\n";
+
+    CNumber c_mod_test_2 = c_num_22 ^ 4;                    //  (4124 ^ 4 = 4124)
+    std::cout << c_mod_test_2.sToStr() << "\n";
+
+    CNumber c_mod_test_3 = c_num_23 ^ 9;                    //  (1921 ^ 9 = 1921)
+    std::cout << c_mod_test_3.sToStr() << "\n";
+
+    CNumber c_mod_test_4 = c_num_24 ^ 10;                   //  (3471 ^ 10 = 3471)
+    std::cout << c_mod_test_4.sToStr() << "\n";
+
+    CNumber c_mod_test_5 = c_num_24 ^ -4;                   //  (3471 ^ (-4) = 3471)
+    std::cout << c_mod_test_5.sToStr() << "\n";
+
+    CNumber c_mod_test_6 = c_num_25 ^ 9;                    //  (9 ^ 9 = 0)
+    std::cout << c_mod_test_6.sToStr() << "\n";
+
+    CNumber c_mod_test_7 = c_num_26 ^ 3;                    //  (333 ^ 3 = 0)
+    std::cout << c_mod_test_7.sToStr() << "\n";
+
     return 0;
 }
-
