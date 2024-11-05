@@ -96,7 +96,7 @@ CNumber CNumber::operator+(const CNumber &pcNewVal) {
 
         }
 
-        c_result.removeLeadingZeros();                                      //  Usunięcie zer wiodących, jeśli są
+        c_result.vRemoveLeadingZeros();                                      //  Usunięcie zer wiodących, jeśli są
         c_result.b_is_negative = b_is_negative;                             //  Ustawienie znaku wyniku
     }
     //  Jeśli znaki składników są przeciwne, należy przeprowadzić odejmowanie
@@ -113,7 +113,7 @@ CNumber CNumber::operator+(const CNumber &pcNewVal) {
         }
     }
 
-    normalizeZeroSign(c_result);                                         //  Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
+    vNormalizeZeroSign(c_result);                                         //  Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
     return c_result;                                                        //  Zwrócenie wyniku
 }
 
@@ -181,8 +181,8 @@ CNumber CNumber::operator-(const CNumber &pcNewVal) {
         c_result.pi_number[c_result.i_length - i - 1] = i_sub;
     }
 
-    c_result.removeLeadingZeros();                              //  Usunięcie zer wiodących, jeśli są
-    normalizeZeroSign(c_result);                             //  Jeśli wynik jest równy zero, to ustawiamy znak na dodatni
+    c_result.vRemoveLeadingZeros();                              //  Usunięcie zer wiodących, jeśli są
+    vNormalizeZeroSign(c_result);                             //  Jeśli wynik jest równy zero, to ustawiamy znak na dodatni
 
     return c_result;                                            //  Zwrócenie wyniku
 }
@@ -214,8 +214,8 @@ CNumber CNumber::operator*(const CNumber &pcNewVal) {
     }
 
     c_result.i_length = i_result_length;                        //  Aktualizacja długości liczby wynikowej
-    c_result.removeLeadingZeros();                              //  Usunięcie zer wiodących, jeśli są
-    normalizeZeroSign(c_result);                             //  Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
+    c_result.vRemoveLeadingZeros();                              //  Usunięcie zer wiodących, jeśli są
+    vNormalizeZeroSign(c_result);                             //  Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
 
     return c_result;                                            //  Zwrócenie wyniku
 }
@@ -266,8 +266,8 @@ CNumber CNumber::operator/(const CNumber &pcNewVal) {
         c_result.pi_number[i] = i_quotient_digit;
     }
 
-    c_result.removeLeadingZeros();                              //  Usunięcie zer wiodących jeśli są
-    normalizeZeroSign(c_result);                             // Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
+    c_result.vRemoveLeadingZeros();                              //  Usunięcie zer wiodących jeśli są
+    vNormalizeZeroSign(c_result);                             // Jeśli wynik jest równy zero to ustawiamy jego znak na dodatni
 
     return c_result;                                            //  Zwrócenie wyniku
 }
@@ -287,7 +287,7 @@ CNumber CNumber::operator%(const CNumber &pcNewVal) {
     c_temp = *this / pcNewVal;
     c_result = *this - (pcOtherCopy * c_temp);
 
-    removeLeadingZeros();
+    vRemoveLeadingZeros();
     return c_result;
 }
 
@@ -399,23 +399,12 @@ std::string CNumber::sIntToString(int i_number) {
 }
 
 //  Usuwanie zer wiodących
-void CNumber::removeLeadingZeros() {
-    int i_new_length = i_length;
-
-    //  Przesunięcie cyfr w lewo
-    while (i_new_length > 1 && pi_number[0] == 0) {
-        for (int i = 0; i < i_new_length; i++) {
-            pi_number[i] = pi_number[i + 1];
-        }
-
-        i_new_length--;                         //  Zmniejszenie długości liczby
-    }
-
-    i_length = i_new_length;                    //  Aktualizacja długości liczby
+void CNumber::vRemoveLeadingZeros() {
+    vShiftLeftAndShrinkSize(*this, 0);
 }
 
 //  Ustawianie znaku wyniku jako dodatni, jeśli wynik ten jest równy zero
-void CNumber::normalizeZeroSign(CNumber &pcNumber) {
+void CNumber::vNormalizeZeroSign(CNumber &pcNumber) {
     if (bCheckIfZero(pcNumber)) pcNumber.b_is_negative = false;
 }
 
@@ -475,6 +464,22 @@ void CNumber::vCopyFrom(const CNumber &pcNewVal) {
     }
 }
 
+void CNumber::vShiftLeftAndShrinkSize(CNumber &pcNumber, int iValue) {
+    int i_new_length = pcNumber.i_length;
+
+    //  Przesunięcie cyfr w lewo
+    while (i_new_length > 1 && pi_number[0] == iValue) {
+        for (int i = 0; i < i_new_length; i++) {
+            pi_number[i] = pi_number[i + 1];
+        }
+
+        i_new_length--;                                  //  Zmniejszenie długości liczby
+    }
+
+    pcNumber.i_length = i_new_length;                    //  Aktualizacja długości liczby
+}
+
+
 //  --  Modyfikacja ----------------------------------------------------------------------------------------------------
 
 CNumber CNumber::operator^(int iDigitToRemove) {
@@ -485,18 +490,7 @@ CNumber CNumber::operator^(int iDigitToRemove) {
         return c_result;
     }
 
-    int i_new_length = c_result.i_length;
-
-    //  Przesunięcie cyfr w lewo
-    while (i_new_length > 1 && pi_number[0] == iDigitToRemove) {
-        for (int i = 0; i < i_new_length; i++) {
-            pi_number[i] = pi_number[i + 1];
-        }
-
-        i_new_length--;                                  //  Zmniejszenie długości liczby
-    }
-
-    c_result.i_length = i_new_length;                    //  Aktualizacja długości liczby
+    this->vShiftLeftAndShrinkSize(c_result, iDigitToRemove);
 
     if (c_result.i_length == 1 && iDigitToRemove == pi_number[0]) c_result = 0;            //  Jeśli liczba składa się w całości z usuwanych cyfr to przypisujemy wynikowi wartość zero
 
