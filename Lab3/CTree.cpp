@@ -80,7 +80,7 @@ CTree CTree::enter(const std::string &formula) {
 
     std::vector<CNode*> pendingNodes;                                                                                   //  Inicjalizacja zbioru oczekujących węzłów
 
-    while (iss >> token) {                                                                                            //  Pętla wykonuje się tak długo, jak we wprowadzonym tekście są symbole
+    while (iss >> token) {                                                                                              //  Pętla wykonuje się tak długo, jak we wprowadzonym tekście są symbole
         bool processed = false;                                                                                         //  Inicjalizacja i ustawienie flagi przeprocesowania symbolu
 
         if (isOperator(token)) {                                                                                        //  Jeśli proceoswany symbol jest operatorem
@@ -146,7 +146,7 @@ CTree CTree::enter(const std::string &formula) {
         else if (isalpha(token[0])) {                                                                                   //  Jeśli procesowany symbol jest wartością zmienną
             CVariableNode* variableNode = new CVariableNode(token);                                                     //  Inicjalizacja węzła - zmiennej
 
-            if (std::find(variable_names.begin(), variable_names.end(), token) == variable_names.end()) {       //  Jeśli
+            if (std::find(variable_names.begin(), variable_names.end(), token) == variable_names.end()) {               //  Jeśli zmienna nie znajduje się w zbiorze zmienncyh
                 variable_names.push_back(token);                                                                        //  Dodanie symbolu zmiennej do listy zimennych
                 variable_count++;                                                                                       //  Inkrementacja licznika zmiennych
             }
