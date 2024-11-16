@@ -1,58 +1,38 @@
 #ifndef CTREE_H
 #define CTREE_H
 #include <string>
+#include "CNode.h"
+#include "Constants.h"
 
-//  --  Klasa CNode ----------------------------------------------------------------------------------------------------
-class CNode {
-    public:
-        CNode();                                    //  Konstruktor domyślny
-        CNode(const CNode &cnOther);                //  Konstruktor kopiujący
-        ~CNode();                                   //  Destruktor
-
-        //  --  Settery -------------------------------------------------------------
-        void vSetValue(std::string sValue);
-        void vSetLeftChild(CNode* cnLeftChild);
-        void vSetRightChild(CNode* cnRightChild);
-
-        //  --  Gettery -------------------------------------------------------------
-        std::string sGetValue();
-        CNode* pcnGetLeftChild();
-        CNode* pcnGetRightChild();
-        CNode** pcnGetChildren();
-
-        //  --  Pozostałe metody ----------------------------------------------------
-        void vAddChild(CNode* cnChild);             //  Dodawanie potomka do węzła
-
-    private:
-        //  Pola klasy
-        CNode* cn_left_child;                       //  Lewe dziecko węzła
-        CNode* cn_right_child;                      //  Prawe dziecko węzła
-        std::string s_node_value;                   //  Wartość węzła
-        int i_children_count;                       //  Licznik potomków węzła
-        CNode** pcn_children;                       //  Wskaźnik na tablicę dzieci
-};
-
-
-//  --  Klasa CTree ----------------------------------------------------------------------------------------------------
 class CTree {
     public:
-        CTree();                                //  Konstruktor domyślny
-        CTree(const CTree &ctOther);            //  Konstruktor kopiujący
-        ~CTree();                               //  Destruktor
+        CTree();                                                                                                        //  Konstruktor domyślny
+        CTree(const CTree &other);                                                                                      //  Konstruktor kopiujący
+        ~CTree();                                                                                                       //  Destruktor
 
-        //  --  Operatory   ---------------------------------------------------------
-        void operator=(const CTree &pctOther);         //  Operator przyrówania
-        CTree* operator+(const CTree &pctOther);       //  Operator dodawania
+        CTree& operator=(const CTree &other);                                                                           //  Operator przypisania
+        CTree operator+(const CTree &other);                                                                            //  Operator dodawania
 
-        //  --  Settery -------------------------------------------------------------
-        void setRoot(CNode* cnRoot);
+        CTree enter(const std::string &formula);                                                                        //  Wprowadzanie formuły
+        void print();                                                                                                   //  Wyświetlanie drzewa
+        void comp(const std::map<std::string, double> &variableValues);                                                 //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
+        void comp(double varValue);                                                                                     //  Obliczanie wartości podformuły korzystając z wartości dla zmiennej
+        void vars();                                                                                                    //  Wypisanie zmiennych w formule
 
-        //  --  Gettery -------------------------------------------------------------
+        //  Gettery
         CNode* getRoot();
+        int getVariableCount();
+        std::vector<std::string> getVariableNames();
 
     private:
-        //  Pola klasy
-        CNode* cn_root;                         //  Korzeń drzewa
+        bool isOperator(const std::string &token);                                                                      //  Sprawdzenie czy symbol jest operatorem
+        bool isUnaryOperator(const std::string &token);                                                                 //  Sprawdzenie czy symbol jest operatorem unarnym
+        bool isBinaryOperator(const std::string &token);                                                                //  Sprawdzenie czt symbol jest operatorem binarnym
+        CNode* findNodeNeedingChild(CNode* node);                                                                       //  Wyszukiwanie węzłów bez wszystkich potomków
 
+        CNode* root;                                                                                                    //  Korzeń drzewa
+        int variable_count;                                                                                             //  Licznik zmiennych w drzewie
+        std::vector<std::string> variable_names;                                                                        //  Zbiór nazw zmiennych
 };
+
 #endif //CTREE_H
