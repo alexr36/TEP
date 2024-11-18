@@ -4,7 +4,8 @@
 
 //  --  Ogólny szablon  ------------------------------------------------------------------------------------------------
 
-template <typename T, typename E> class CResult {
+template <typename T, typename E>
+class CResult {
     public:
         CResult(const T &newValue) : value(new T(newValue)), errors(), success(true) {}
         CResult(E *error) : value(0), errors(1, error), success(false) {}
@@ -18,7 +19,15 @@ template <typename T, typename E> class CResult {
             delete value;
 
             for (typename std::vector<E*>::iterator it = errors.begin(); it != errors.end(); it++) {
-                delete *it;
+                //delete *it;   //todo: tu powoduje błąd bo zwalniamy nieazaalokowaną pamięć
+
+                if (*it == NULL) {
+                    std::cout << "Błąd: wskaźnik jest NULL, nie można usunąć.\n";
+                }
+                else {
+                    std::cout << "Usuwanie wskaźnika: " << *it << "\n";
+                    delete *it;
+                }
             }
         }
 
@@ -63,7 +72,8 @@ template <typename T, typename E> class CResult {
 
 //  --  Specjalizacja dla typu void ------------------------------------------------------------------------------------
 
-template <typename E> class CResult<void, E> {
+template <typename E>
+class CResult<void, E> {
     public:
         CResult() : success(true) {}
         CResult(E *error) : errors(1, error), success(false) {}
