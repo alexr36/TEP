@@ -26,7 +26,7 @@ COperatorNode::COperatorNode(const COperatorNode &other) {
     max_children_count = other.max_children_count;
     children = new CNode*[children_count];                                                                              //  Rezerwacja odpowiedniej przestrzeni dla tablicy potomków
 
-    copyNodeContents(*this, other);                                                                   //  Skopiowanie tablicy potomków
+    copyNodeContents(*this, other);                                                                                 //  Skopiowanie tablicy potomków
 }
 
 
@@ -36,7 +36,7 @@ COperatorNode::~COperatorNode() {
         delete children[i];
     }
 
-    delete children;                                                                                                    //  Usunięcie tablicy potomków
+    delete[] children;                                                                                                    //  Usunięcie tablicy potomków
 }
 
 
@@ -148,10 +148,10 @@ void COperatorNode::printNode() {
 
 //  Kopiowanie węzła
 CNode* COperatorNode::copyNode() {
-    COperatorNode* copiedNode = new COperatorNode(operation_type, children_count);                           //  Inicjalizacja wskaźnika na kopiowany obiekt
+    COperatorNode* copiedNode = new COperatorNode(*this);                                                               //  Inicjalizacja wskaźnika na kopiowany obiekt
 
     for (int i = 0; i < children_count; i++) {
-        if (children[i] != NULL) copiedNode->setChild(i, children[i]->copyNode());                                  //  Jeśli potomek istnieje wykonujemy dla niego operację kopiowania
+        if (children[i] != NULL) copiedNode->children[i] = children[i]->copyNode();                                     //  Jeśli potomek istnieje wykonujemy dla niego operację kopiowania
     }
 
     return copiedNode;                                                                                                  //  Zwrócenie kopii
@@ -194,6 +194,20 @@ CNode* COperatorNode::getNextUnpopulatedChild() {
     }
 
     return NULL;                                                                                                        // Brak 'nieuzupełnionych' potomków
+}
+
+
+//  Konwersja węzłą na postać drukowalną
+std::string COperatorNode::toString() {
+    std::string result = operation_type;
+
+    for (int i = 0; i < getMaxChildrenCount(); i++) {
+        CNode* child = getChild(i);
+
+        if (child != NULL) result += " " + child->toString();
+    }
+
+    return result;
 }
 
 //  --  Settery   --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --
@@ -278,6 +292,15 @@ CNode* CConstantNode::copyNode() {
     return new CConstantNode(constant_value);
 }
 
+
+//  Konwersja węzłą na postać drukowalną
+std::string CConstantNode::toString() {
+    std::ostringstream oss;
+    oss << constant_value;
+
+    return oss.str();
+}
+
 //  --  Klasa CVariableNode --------------------------------------------------------------------------------------------
 
 //  Konstruktor przeciążony
@@ -323,4 +346,10 @@ void CVariableNode::collectVariables(std::set<std::string> &vars) {
 //  Kopiowanie węzła
 CNode* CVariableNode::copyNode() {
     return new CVariableNode(variable_name);
+}
+
+
+//  Konwersja węzłą na postać drukowalną
+std::string CVariableNode::toString() {
+    return variable_name;
 }

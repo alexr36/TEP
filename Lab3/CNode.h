@@ -1,8 +1,10 @@
 #ifndef CNODE_H
 #define CNODE_H
+#include <iostream>
 #include <set>
 #include <string>
 #include <map>
+#include <sstream>
 
 //  Klasa CNode - abstrakcyjna
 class CNode {
@@ -19,6 +21,7 @@ class CNode {
         virtual bool isVariable() { return false; }                                                                     //  Sprawdzanie czy węzeł jest zmienną
         virtual void addChild(CNode* child) {}                                                                          //  Dodawanie potomka do węzła
         virtual bool isFullyPopulated() = 0;                                                                            //  Sprawdzanie czy węzeł ma wszystkich potomków
+        virtual std::string toString() = 0;                                                                             //  Konwersja węzłą na postać drukowalną
 
         //  Settery
         virtual void setParent(CNode* newParent) { parent = newParent; }
@@ -52,6 +55,7 @@ class COperatorNode : public CNode {
         void addChild(CNode *child);                                                                                    //  Dodawanie potomka do węzła
         bool isFullyPopulated();                                                                                        //  Sprawdzanie czy węzeł ma wszystkich potomków
         CNode* getNextUnpopulatedChild();                                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
+        std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
 
         //  Settery
         void setChild(int index, CNode *child);
@@ -86,8 +90,9 @@ class CConstantNode : public CNode {
         bool isConstant() { return true; }                                                                              //  Sprawdzanie czy węzeł jest stałą
         bool isVariable() { return false; }                                                                             //  Sprawdzanie czy węzeł jest zmienną
         void addChild(CNode *child) {}                                                                                  //  Dodawanie potomka do węzła
-        bool isFullyPopulated() {}                                                                                      //  Sprawdzanie czy węzeł ma wszystkich potomków
-        CNode* getNextUnpopulatedChild() {}                                                                             //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
+        bool isFullyPopulated() { return true; }                                                                        //  Sprawdzanie czy węzeł ma wszystkich potomków
+        CNode* getNextUnpopulatedChild() { return NULL; }                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
+        std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
 
     private:
         double constant_value;                                                                                          //  Wartość stałej
@@ -107,8 +112,9 @@ class CVariableNode : public CNode {
         bool isConstant() { return false; }                                                                             //  Sprawdzanie czy węzeł jest stałą
         bool isVariable() { return true; }                                                                              //  Sprawdzanie czy węzeł jest zmienną
         void addChild(CNode *child) {}                                                                                  //  Dodawanie potomka do węzła
-        bool isFullyPopulated() {}                                                                                      //  Sprawdzanie czy węzeł ma wszystkich potomków
-        CNode* getNextUnpopulatedChild() {}                                                                             //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
+        bool isFullyPopulated() { return true; }                                                                        //  Sprawdzanie czy węzeł ma wszystkich potomków
+        CNode* getNextUnpopulatedChild() { return NULL; }                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
+        std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
 
     private:
         std::string variable_name;                                                                                      //  Nazwa zmiennej

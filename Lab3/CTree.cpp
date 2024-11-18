@@ -257,12 +257,29 @@ void CTree::vars() {
         std::cout << *variables.begin();
     }
     else {
-        for (const std::string& varName : variable_names) {
-            std::cout << varName << " ";
+        for (std::vector<std::string>::const_iterator it = variable_names.begin(); it != variable_names.end(); it++) {
+            std::cout << *it << " ";
         }
     }
 
     std::cout << "\n";
+}
+
+
+std::string CTree::convertTreeToString() {
+    if (root == NULL) return "";
+/*
+    std::string result = root->toString();
+    CNode* currentNode = root;
+
+    for (int i = 0; i < currentNode->getChildrenCount(); i++) {
+        result += " " + currentNode->toString();
+        currentNode = currentNode->getChild(i);
+    }
+*/
+
+    std::string result = root->toString();
+    return result + "\n";
 }
 
 

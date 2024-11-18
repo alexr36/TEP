@@ -18,6 +18,7 @@ class CTree {
         void comp(const std::map<std::string, double> &variableValues);                                                 //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
         void comp(double varValue);                                                                                     //  Obliczanie wartości podformuły korzystając z wartości dla zmiennej
         void vars();                                                                                                    //  Wypisanie zmiennych w formule
+        std::string convertTreeToString();                                                                              //  Konwersja drzewa na postać drukowalną
 
         //  Gettery
         CNode* getRoot();
