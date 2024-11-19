@@ -21,7 +21,7 @@ void CMenu::run() {
             enter(tree, iss);
         }
         else if (command == "print") {
-            tree.print();
+            tree.printPrefix();
         }
         else if (command == "comp") {
             comp(tree, iss);
@@ -59,16 +59,20 @@ void CMenu::comp(CTree &tree, std::istringstream &iss) {
     std::map<std::string, double> variableValues;
 
     // Wczytanie wartości zmiennych
+    const std::vector<std::string>& variableNames = tree.getVariableNames(); // Pobierz nazwy zmiennych
     double value;
-    for (const std::string& varName : tree.getVariableNames()) {
+
+    for (std::vector<std::string>::const_iterator it = variableNames.begin(); it != variableNames.end(); ++it) {
+        const std::string& varName = *it; // Nazwa bieżącej zmiennej
+
         if (iss >> value) {
-            variableValues[varName] = value;
+            variableValues[varName] = value; // Przypisz wartość do zmiennej
         }
     }
 
     // Sprawdzenie, czy wprowadzono poprawną liczbę wartości
-    if (variableValues.size() == tree.getVariableNames().size()) {
-        tree.comp(variableValues);
+    if (variableValues.size() == variableNames.size()) {
+        tree.comp(variableValues); // Wywołaj metodę obliczeniową
     }
     else {
         std::cout << "Blad: Liczba wprowadzonych wartosci nie zgadza sie z liczba zmiennych.\n";

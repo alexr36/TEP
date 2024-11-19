@@ -192,17 +192,37 @@ CTree CTree::enter(const std::string &formula) {
 
     if (was_corrected) {                                                                                                //  Jeśli formuła została oznaczona jako poprawiona
         std::cout << "Przetwarzana formuła: ";
-        print();                                                                                                        //  Pokazaine poprawioną formułę
+        printPrefix();                                                                                                  //  Pokazaine poprawioną formułę
     }
 
     return *this;                                                                                                       //  Zwrócenie wskaźnika
 }
 
 
-//  Wyświetlanie drzewa
-void CTree::print() {
+//  Wyświetlanie drzewa - wariant prefix
+void CTree::printPrefix() {
     if (root != NULL) {
-        root->printNode();
+        root->printPrefixNode();
+        std::cout << "\n";
+    }
+    else std::cout << "Nie wprowadzono formuly.\n";
+}
+
+
+//  Wyświetlanie drzewa - wariant postfix
+void CTree::printPostfix() {
+    if (root != NULL) {
+        root->printPostfixNode();
+        std::cout << "\n";
+    }
+    else std::cout << "Nie wprowadzono formuly.\n";
+}
+
+
+//  Wyświetlanie drzewa - wariant infix
+void CTree::printInfix() {
+    if (root != NULL) {
+        root->printInfixNode();
         std::cout << "\n";
     }
     else std::cout << "Nie wprowadzono formuly.\n";

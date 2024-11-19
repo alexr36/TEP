@@ -134,15 +134,58 @@ double COperatorNode::compute(const std::map<std::string, double> &variableValue
 }
 
 
-//  Wyświetlanie węzła wraz z potomkami
-void COperatorNode::printNode() {
+//  Wyświetlanie węzła wraz - wartiant prefix
+void COperatorNode::printPrefixNode() {
     std::cout << operation_type;                                                                                        //  Wyświetlenie rodzaju operacji
 
     for (int i = 0; i < children_count; i++) {
         std::cout << " ";
 
-        if (children[i] != NULL) children[i]->printNode();                                                              //  Jeśli potomek istnieje to wyświetlamy jego zawartość
+        if (children[i] != NULL) children[i]->printPrefixNode();                                                        //  Jeśli potomek istnieje to wyświetlamy jego zawartość
     }
+}
+
+
+//  Wyświetlanie węzła wraz - wartiant postfix
+void COperatorNode::printPostfixNode() {
+    for (int i = 0; i < children_count; ++i) {
+        if (children[i] != NULL) {
+            children[i]->printPostfixNode();
+            std::cout << " ";
+        }
+    }
+
+    std::cout << operation_type;
+}
+
+
+//  Wyświetlanie węzła wraz - wartiant infix
+void COperatorNode::printInfixNode() {
+    // Operator jednoargumentowy
+    if (children_count == 1) {
+        std::cout << operation_type << "(";
+        if (children[0] != NULL) {
+            children[0]->printInfixNode();
+        }
+
+        std::cout << ")";
+        return;
+    }
+
+    // Operator wieloargumentowy
+    if (children_count > 1) std::cout << "(";
+
+    for (int i = 0; i < children_count; ++i) {
+        if (children[i] != NULL) {
+            children[i]->printInfixNode();
+        }
+
+        if (i < children_count - 1) {
+            std::cout << " " << operation_type << " ";
+        }
+    }
+
+    if (children_count > 1) std::cout << ")";
 }
 
 
@@ -281,9 +324,21 @@ double CConstantNode::compute(const std::map<std::string, double> &variableValue
 }
 
 
-//  Wyświetlanie węzła
-void CConstantNode::printNode() {
+//  Wyświetlanie węzła - wartiant prefix
+void CConstantNode::printPrefixNode() {
     std::cout << constant_value;
+}
+
+
+//  Wyświetlanie węzła - wartiant postfix
+void CConstantNode::printPostfixNode() {
+    printPrefixNode();
+}
+
+
+//  Wyświetlanie węzła - wartiant infix
+void CConstantNode::printInfixNode() {
+    printPrefixNode();
 }
 
 
@@ -331,10 +386,23 @@ double CVariableNode::compute(const std::map<std::string, double>& variableValue
 }
 
 
-//  Wyświetlanie zawartości węzła
-void CVariableNode::printNode() {
+//  Wyświetlanie węzła - wartiant prefix
+void CVariableNode::printPrefixNode() {
     std::cout << variable_name;
 }
+
+
+//  Wyświetlanie węzła - wartiant postfix
+void CVariableNode::printPostfixNode() {
+    printPrefixNode();
+}
+
+
+//  Wyświetlanie węzła - wartiant infix
+void CVariableNode::printInfixNode() {
+    printPrefixNode();
+}
+
 
 
 //  Zbieranie zmiennych

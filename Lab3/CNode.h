@@ -13,7 +13,9 @@ class CNode {
         virtual ~CNode() {}                                                                                             //  Destruktor
         virtual double compute(double varValue) = 0;                                                                    //  Obliczanie wartości węzła korzystając z wartości dla zmiennej
         virtual double compute(const std::map<std::string, double> &variableValues) = 0;                                //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
-        virtual void printNode() = 0;                                                                                   //  Wyświetlanie zawartości węzła wraz z potomkami
+        virtual void printPrefixNode() = 0;                                                                             //  Wyświetlanie zawartości węzła - wariant prefix
+        virtual void printPostfixNode() = 0;                                                                            //  Wyświetlanie zawartości węzła - wartiant postfix
+        virtual void printInfixNode() = 0;                                                                              //  Wyświetlanie zawartości węzła - wartiant infix;
         virtual void collectVariables(std::set<std::string> &vars) = 0;                                                 //  Zbieranie zmiennych
         virtual CNode* copyNode() = 0;                                                                                  //  Kopiowanie węzła
         virtual bool isOperator() { return false; }                                                                     //  Sprawdzanie czy węzeł jest operatorem
@@ -46,7 +48,9 @@ class COperatorNode : public CNode {
         ~COperatorNode();                                                                                               //  Destruktor
         double compute(double varValue);                                                                                //  Obliczanie wartości węzła korzystając z wartości dla zmiennej
         double compute(const std::map<std::string, double> &variableValues);                                            //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
-        void printNode();                                                                                               //  Wyświetlanie zawartości węzła wraz z potomkami
+        void printPrefixNode();                                                                                         //  Wyświetlanie zawartości węzła - wariant prefix
+        void printPostfixNode();                                                                                        //  Wyświetlanie zawartości węzła - wartiant postfix
+        void printInfixNode();                                                                                          //  Wyświetlanie zawartości węzła - wartiant infix;
         void collectVariables(std::set<std::string> &vars) {}                                                           //  Zbieranie zmiennych
         CNode* copyNode();                                                                                              //  Kopiowanie węzła
         bool isOperator() { return true; }                                                                              //  Sprawdzanie czy węzeł jest operatorem
@@ -83,7 +87,9 @@ class CConstantNode : public CNode {
         CConstantNode(const CConstantNode &other);                                                                      //  Konstruktor kopiujący
         double compute(double varValue);                                                                                //  Obliczanie wartości węzła korzystając z wartości dla zmiennej
         double compute(const std::map<std::string, double> &variableValues);                                            //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
-        void printNode();                                                                                               //  Wyświetlanie zawartości węzła
+        void printPrefixNode();                                                                                         //  Wyświetlanie zawartości węzła - wariant prefix
+        void printPostfixNode();                                                                                        //  Wyświetlanie zawartości węzła - wartiant postfix
+        void printInfixNode();                                                                                          //  Wyświetlanie zawartości węzła - wartiant infix;
         void collectVariables(std::set<std::string> &vars) {}                                                           //  Zbieranie zmiennych
         CNode* copyNode();                                                                                              //  Kopiowanie węzła
         bool isOperator() { return false; }                                                                             //  Sprawdzanie czy węzeł jest operatorem
@@ -105,7 +111,9 @@ class CVariableNode : public CNode {
         CVariableNode(const CVariableNode &other);                                                                      //  Konstruktor kopiujący
         double compute(double varValue);                                                                                //  Obliczanie wartości węzła korzystając z wartości dla zmiennej
         double compute(const std::map<std::string, double> &variableValues);                                            //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
-        void printNode();                                                                                               //  Wyświetlanie zawartości węzła
+        void printPrefixNode();                                                                                         //  Wyświetlanie zawartości węzła - wariant prefix
+        void printPostfixNode();                                                                                        //  Wyświetlanie zawartości węzła - wartiant postfix
+        void printInfixNode();                                                                                          //  Wyświetlanie zawartości węzła - wartiant infix;
         void collectVariables(std::set<std::string> &vars);                                                             //  Zbieranie zmiennych
         CNode* copyNode();                                                                                              //  Kopiowanie węzła
         bool isOperator() { return false; }                                                                             //  Sprawdzanie czy węzeł jest operatorem
@@ -115,6 +123,8 @@ class CVariableNode : public CNode {
         bool isFullyPopulated() { return true; }                                                                        //  Sprawdzanie czy węzeł ma wszystkich potomków
         CNode* getNextUnpopulatedChild() { return NULL; }                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
         std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
+
+
 
     private:
         std::string variable_name;                                                                                      //  Nazwa zmiennej

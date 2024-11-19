@@ -9,39 +9,39 @@ void test() {
     COperatorNode *op_node = new COperatorNode("+", 0, 2);
     op_node->addChild(new CConstantNode(2));
     op_node->addChild(new CConstantNode(3));
-    op_node->printNode();
+    op_node->printPrefixNode();
     std::cout << "\n";
 
     CConstantNode *const_node = new CConstantNode(5);
-    const_node->printNode();
+    const_node->printPrefixNode();
     std::cout << "\n";
 
     CVariableNode *var_node = new CVariableNode("v");
-    var_node->printNode();
+    var_node->printPrefixNode();
     std::cout << "\n";
 
     COperatorNode *new_op_node = new COperatorNode("*", 0, 2);
     new_op_node->addChild(const_node);
     new_op_node->addChild(var_node);
-    new_op_node->printNode();
+    new_op_node->printPrefixNode();
     std::cout << "\n";
 
     std::cout << "\nKopie:\n";
 
     COperatorNode *op_copy = new COperatorNode(*op_node);
-    op_copy->printNode();
+    op_copy->printPrefixNode();
     std::cout << "\n";
 
     CConstantNode *const_copy = new CConstantNode(*const_node);
-    const_copy->printNode();
+    const_copy->printPrefixNode();
     std::cout << "\n";
 
     CVariableNode *var_copy = new CVariableNode(*var_node);
-    var_copy->printNode();
+    var_copy->printPrefixNode();
     std::cout << "\n";
 
     COperatorNode *new_op_copy = new COperatorNode(*new_op_node);
-    new_op_copy->printNode();
+    new_op_copy->printPrefixNode();
     std::cout << "\n";
 
     delete op_node;
