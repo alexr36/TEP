@@ -120,14 +120,12 @@ double COperatorNode::compute(const std::map<std::string, double> &variableValue
         }
     }
     else if (operation_type == SINUS_OPERATOR) {
-        if (children[0] != NULL) {
-            result = sin(children[0]->compute(variableValues));
-        }
+        if (children[0] != NULL) result = sin(children[0]->compute(variableValues));
+
     }
     else if (operation_type == COSINUS_OPERATOR) {
-        if (children[0] != NULL) {
-            result = cos(children[0]->compute(variableValues));
-        }
+        if (children[0] != NULL) result = cos(children[0]->compute(variableValues));
+
     }
 
     return result;
@@ -420,4 +418,25 @@ CNode* CVariableNode::copyNode() {
 //  Konwersja węzłą na postać drukowalną
 std::string CVariableNode::toString() {
     return variable_name;
+}
+
+
+//  --  Modyfikacja ----------------------------------------------------------------------------------------------------
+
+int COperatorNode::countConstantsGreaterThan(double value) {
+    int count = 0;
+
+    for (int i = 0; i < children_count; ++i) {
+        if (children[i] != NULL) count += children[i]->countConstantsGreaterThan(value);
+    }
+
+    return count;
+}
+
+int CConstantNode::countConstantsGreaterThan(double value) {
+    return (constant_value > value) ? 1 : 0;
+}
+
+int CVariableNode::countConstantsGreaterThan(double value) {
+    return 0;
 }

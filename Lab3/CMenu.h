@@ -11,6 +11,9 @@ class CMenu {
         void comp(CTree &tree, std::istringstream &iss);                                                                //  Obliczanie wartości wyrażenia
         void join(CTree &tree, std::istringstream &iss);                                                                //  Łączenie drzew
         void help();                                                                                                    //  Wyswietlanie dostepnych polecen
+
+        //  Modyfikacja
+        void cntgt(CTree &tree, std::istringstream &iss);                                                               //  Zliczanie stałych większych od zadanej wartości
 };
 
 #endif //CMENU_H

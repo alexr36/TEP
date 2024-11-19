@@ -15,13 +15,15 @@ class CTree {
 
         CTree enter(const std::string &formula);                                                                        //  Wprowadzanie formuły
         void printPrefix();                                                                                             //  Wyświetlanie drzewa - wariant prefix
-        void printPostfix();                                                                                             //  Wyświetlanie drzewa - wariant prefix
-        void printInfix();                                                                                             //  Wyświetlanie drzewa - wariant prefix
+        void printPostfix();                                                                                            //  Wyświetlanie drzewa - wariant prefix
+        void printInfix();                                                                                              //  Wyświetlanie drzewa - wariant prefix
         void comp(const std::map<std::string, double> &variableValues);                                                 //  Obliczanie wartości formuły korzystając ze zbioru zmiennych
         void comp(double varValue);                                                                                     //  Obliczanie wartości podformuły korzystając z wartości dla zmiennej
         void vars();                                                                                                    //  Wypisanie zmiennych w formule
         std::string convertTreeToString();                                                                              //  Konwersja drzewa na postać drukowalną
 
+        //  Modyfikacja
+        int countConstantsGreaterThan(double &value);                                                                   //  Zliczanie stałych większych od zadanej wartości
 
         //  Gettery
         CNode* getRoot();

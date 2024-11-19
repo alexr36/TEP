@@ -25,6 +25,9 @@ class CNode {
         virtual bool isFullyPopulated() = 0;                                                                            //  Sprawdzanie czy węzeł ma wszystkich potomków
         virtual std::string toString() = 0;                                                                             //  Konwersja węzłą na postać drukowalną
 
+        //  Modyfikacja
+        virtual int countConstantsGreaterThan(double value) { return 0; }                                               //  Zliczanie stałych większych od zadanej wartości
+
         //  Settery
         virtual void setParent(CNode* newParent) { parent = newParent; }
 
@@ -60,6 +63,9 @@ class COperatorNode : public CNode {
         bool isFullyPopulated();                                                                                        //  Sprawdzanie czy węzeł ma wszystkich potomków
         CNode* getNextUnpopulatedChild();                                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
         std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
+
+        //  Modyfikacja
+        int countConstantsGreaterThan(double value);                                                                    //  Zliczanie stałych większych od zadanej wartości
 
         //  Settery
         void setChild(int index, CNode *child);
@@ -100,6 +106,9 @@ class CConstantNode : public CNode {
         CNode* getNextUnpopulatedChild() { return NULL; }                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
         std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
 
+        //  Modyfikacja
+        int countConstantsGreaterThan(double value);                                                                    //  Zliczanie stałych większych od zadanej wartości
+
     private:
         double constant_value;                                                                                          //  Wartość stałej
 };
@@ -124,7 +133,8 @@ class CVariableNode : public CNode {
         CNode* getNextUnpopulatedChild() { return NULL; }                                                               //  Zwracanie następnego w kolejce węzła-potomka bez wszystkich swoich potomków
         std::string toString();                                                                                         //  Konwersja węzłą na postać drukowalną
 
-
+        //  Modyfikacja
+        int countConstantsGreaterThan(double value);                                                                    //  Zliczanie stałych większych od zadanej wartości
 
     private:
         std::string variable_name;                                                                                      //  Nazwa zmiennej

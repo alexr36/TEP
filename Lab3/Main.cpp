@@ -73,6 +73,8 @@ int main() {
     CMenu menu;
     menu.run();
 
+    //  enter cos - * / a b + a sin 0 c
+
     //test();
 
     return 0;

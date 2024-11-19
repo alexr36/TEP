@@ -195,6 +195,10 @@ CTree CTree::enter(const std::string &formula) {
         printPrefix();                                                                                                  //  Pokazaine poprawioną formułę
     }
 
+    for (typename std::vector<CNode*>::iterator it = pendingNodes.begin(), end = pendingNodes.end(); it != end; it++) {
+        delete *it;
+    }
+
     return *this;                                                                                                       //  Zwrócenie wskaźnika
 }
 
@@ -286,17 +290,9 @@ void CTree::vars() {
 }
 
 
+//  Konwersja drzewa na postać drukowalną
 std::string CTree::convertTreeToString() {
     if (root == NULL) return "";
-/*
-    std::string result = root->toString();
-    CNode* currentNode = root;
-
-    for (int i = 0; i < currentNode->getChildrenCount(); i++) {
-        result += " " + currentNode->toString();
-        currentNode = currentNode->getChild(i);
-    }
-*/
 
     std::string result = root->toString();
     return result + "\n";
@@ -320,17 +316,14 @@ bool CTree::isBinaryOperator(const std::string &token) {
 
 //  Wyszukiwanie węzłów bez wszystkich potomków
 CNode* CTree::findNodeNeedingChild(CNode* node) {
-    if (node->isOperator() && !node->isFullyPopulated()) {
-        return node;
-    }
+    if (node->isOperator() && !node->isFullyPopulated()) return node;
 
     for (int i = 0; i < node->getChildrenCount(); i++) {
         CNode* foundNode = findNodeNeedingChild(node->getChild(i));
 
-        if (foundNode) {
-            return foundNode;
-        }
+        if (foundNode != NULL) return foundNode;
     }
+
     return NULL;
 }
 
@@ -346,4 +339,13 @@ int CTree::getVariableCount() {
 
 std::vector<std::string> CTree::getVariableNames() {
     return variable_names;
+}
+
+
+//  --  Modyfikacja ----------------------------------------------------------------------------------------------------
+
+int CTree::countConstantsGreaterThan(double &value) {
+    if (root != NULL) return root->countConstantsGreaterThan(value);
+
+    return 0;
 }
