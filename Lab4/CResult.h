@@ -111,13 +111,6 @@ CResult<T, E>& CResult<T, E>::operator=(const CResult<T, E> &other) {           
 
 
 template<typename T, typename E>
-void CResult<T, E>::addError(E *newError) {
-    errors.push_back(newError);
-    success = false;
-}
-
-
-template<typename T, typename E>
 bool CResult<T, E>::isSuccess() {
     return success;
 }

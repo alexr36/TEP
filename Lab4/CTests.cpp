@@ -1,4 +1,6 @@
 #include "CTests.h"
+
+#include "Constants.cpp"
 #include "CResultSaver.h"
 
 CTests::CTests() {}
@@ -38,7 +40,7 @@ void CTests::dividePositiveTest() {
 
 void CTests::divideNegativeTest() {
     CResult<double, CError> result = divide(1.0, 0);
-    CResultSaver<double>::saveToFile(result, "result_errors.txt");
+    CResultSaver<double>::saveToFile(result, FILENAME_ERRORS_NORMAL);
 
     if (result.isSuccess()) {
         std::cout << "Wynik: " << result.getValue() << "\n";
@@ -65,7 +67,7 @@ CResult<CTree, CError> CTests::createTree(std::string &formula) {
 
 void CTests::createTreeTest(std::string &formula) {
     CResult<CTree, CError> result = createTree(formula);
-    CResultSaver<CTree>::saveToFile(result, "result_tree_errors.txt");
+    CResultSaver<CTree>::saveToFile(result, FILENAME_ERRORS_TREE);
 
     // Wyświetlenie wyniku drzewa
     if (result.isSuccess()) {
