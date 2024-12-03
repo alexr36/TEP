@@ -6,13 +6,6 @@
 #include "/Users/alexrogozinski/CLionProjects/TEP/Lab/Lab4act/CError.h"
 #include "Constants.h"
 
-/*  todo:
- *  1. nalezy poprawic typ zwracany przez enter z CTree na CResult<CTree, CError>
- *  2. ponadto poprawic typy zwracane przez metody typu comp czy vars na string (?)
- *  3. opcjonalnie poprawic i dodac metody konwertowania na string w odpowiednim przejsciu drzewa (prefix juz gotowy)
- *  4. zadbaj o to zeby stringi errorów byly odpowiednio dodwawane do wektora w CError oraz ze cout jest tylko w klasie CMenu przy komunikacji z userem
- */
-
 class CTree {
     public:
         CTree();                                                                                                        //  Konstruktor domyślny
