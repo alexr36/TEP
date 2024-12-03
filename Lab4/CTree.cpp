@@ -40,7 +40,7 @@ CTree &CTree::operator=(const CTree &other) {
 //  Operator dodawania
 CTree CTree::operator+(const CTree &other) {
     CTree newTree;
-    COperatorNode* newRoot = new COperatorNode(ADDING_OPERATOR, BINARY_OPERATOR_ARGS_COUNT);
+    COperatorNode* newRoot = new COperatorNode(ADDING_OPERATOR, BINARY_OPERATOR_ARGS_COUNT, BINARY_OPERATOR_ARGS_COUNT);
 
     // Unikalne zmienne - najpierw zbieramy zmienne w zbiór
     std::set<std::string> unique_variables;
@@ -60,6 +60,7 @@ CTree CTree::operator+(const CTree &other) {
 
     //  Aktualizacja korzenia i zbioru zmiennych
     newTree.root = newRoot;
+
     variable_count = result.size();
     variable_names = result;
 
