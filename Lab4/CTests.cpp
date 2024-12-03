@@ -10,7 +10,8 @@ CTests::~CTests() {}
 
 void CTests::runTests() {
     //divisionTests();
-    treeCreatingTests();
+    //treeCreatingTests();
+    modificationTests();
 }
 
 
@@ -52,8 +53,8 @@ void CTests::divideNegativeTest() {
 
 
 void CTests::divisionTests() {
-    //dividePositiveTest();
-    divideNegativeTest();
+    dividePositiveTest();
+    //divideNegativeTest();
 }
 
 //  --  Tworzenie drzewa    --------------------------------------------------------------------------------------------
@@ -84,4 +85,24 @@ void CTests::treeCreatingTests() {
     std::string formula_negative = "* 5";
     createTreeTest(formula_positive);
     //createTreeTest(formula_negative);
+}
+
+
+//  --  Modyfikacja    -------------------------------------------------------------------------------------------------
+
+CResult<int*, CError> CTests::test0(int value) {
+    if (value == 0) return new CError("error!");
+
+    return new int(value);
+}
+
+
+CResult<double *, CError> CTests::test1(int value) {
+    return test0(value).toResult<double>(new double(value / 2.0));
+}
+
+
+void CTests::modificationTests() {
+    std::cout << test1(0).isSuccess() << "\n";
+    std::cout << test1(1).isSuccess() << "\n";
 }

@@ -9,7 +9,7 @@ public:
     CTests();
     ~CTests();
 
-    //  --  Dzielenie   ----------------------------------------------------------------------------------------------------
+    //  --  Dzielenie   ------------------------------------------------------------------------------------------------
 
     CResult<double, CError> divide(double dividend, double divisor);
     void dividePositiveTest();
@@ -21,6 +21,12 @@ public:
     CResult<CTree, CError> createTree(std::string &formula);
     void createTreeTest(std::string &formula);
     void treeCreatingTests();
+
+    //  --  Modyfikacja ------------------------------------------------------------------------------------------------
+
+    CResult<int*, CError> test0(int value);
+    CResult<double*, CError> test1(int value);
+    void modificationTests();
 
     void runTests();
 };

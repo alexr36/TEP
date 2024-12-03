@@ -28,6 +28,7 @@ class CResult {
 
     private:
         void copyResult(const CResult<T, E> &other);                                                                    //  Kopiowanie zawartości wyniku
+        void clear(const CResult<T, E> &other);
 
         T* value;                                                                                                       //  Wartość właściwa wyniku
         std::vector<E*> errors;                                                                                         //  Wektor błędów
@@ -70,9 +71,7 @@ template<typename T, typename E>
 CResult<T, E>::~CResult() {                                                                                             //  Destruktor
     delete value;                                                                                                       //  Zwolnienie wskaźnika wartości
 
-    for (typename std::vector<E*>::iterator it = errors.begin(); it != errors.end(); it++) {                            //  Dla każdego błędu w wektorze błędów
-        if (*it != NULL) delete *it;                                                                                    //  Jeśli bład istnieje to usunięcie go
-    }
+    clear(*this);
 }
 
 
@@ -99,9 +98,7 @@ CResult<T, E>& CResult<T, E>::operator=(const CResult<T, E> &other) {           
     if (this != &other) {                                                                                               //  Zabezpieczenie przed samoprzydzielaniem
         delete value;                                                                                                   //  Zwolnienie wskaźnika wartości
 
-        for (typename std::vector<E*>::iterator it = other.errors.begin(); it != other.errors.end(); it++) {            //  Dla każdego błędu w wektorze błędów
-            if (*it != NULL) delete *it;                                                                                //  Jeśli bład istnieje to usunięcie go
-        }
+        clear(other);
 
         copyResult(other);                                                                                              //  Skopiowanie zawartości wyniku
     }
@@ -136,6 +133,15 @@ void CResult<T, E>::copyResult(const CResult<T, E> &other) {                    
     errors = other.errors;
     success = other.success;
 }
+
+
+template<typename T, typename E>
+void CResult<T, E>::clear(const CResult<T, E> &other) {
+    for (typename std::vector<E*>::const_iterator it = other.errors.begin(); it != other.errors.end(); it++) {          //  Dla każdego błędu w wektorze błędów
+        if (*it != NULL) delete *it;                                                                                    //  Jeśli bład istnieje to usunięcie go
+    }
+}
+
 
 //  --  Specjalizacja dla typu void ------------------------------------------------------------------------------------
 
@@ -254,5 +260,152 @@ void CResult<void, E>::copyResult(const CResult<void, E> &other) {              
     errors = other.errors;
     success = other.success;
 }
+
+//  --  Modyfikacja ----------------------------------------------------------------------------------------------------
+
+//  --  Definicja klasy --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --
+
+template<typename T, typename E>
+class CResult<T*, E> {
+    public:
+        CResult(T* newValue);
+        CResult(E* newError);
+        CResult(std::vector<E*> &newErrors);
+        CResult(const CResult<T*, E> &other);
+
+        ~CResult();
+
+        CResult<T*, E>& operator=(const CResult<T*, E> &other);
+
+        template<typename TOther>
+        CResult<TOther*, E> toResult(TOther* value);
+
+        bool isSuccess();
+
+        T* getValue();
+        std::vector<E*>& getErrors();
+
+    private:
+        void copyResult(const CResult<T*, E> &other);
+        void clear();
+
+        T* value;
+        std::vector<E*> errors;
+        bool success;
+};
+
+//  --  Implementacja klasy --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --  --
+
+template<typename T, typename E>
+CResult<T*, E>::CResult(T* newValue) {                                                                                  //  Konstruktor dla wyniku
+    value = newValue;
+    success = true;
+}
+
+
+template<typename T, typename E>
+CResult<T*, E>::CResult(E *newError) {                                                                                  //  Konstruktor dla pojedynczego błędu
+    if (newError) {
+        errors.push_back(new E(*newError));
+    }
+
+    success = false;
+    value = NULL;
+}
+
+
+template<typename T, typename E>
+CResult<T*, E>::CResult(std::vector<E*> &newErrors) {                                                                   //  Konstruktor dla wektora błędów
+    for (typename std::vector<E*>::iterator it = newErrors.begin(); it != newErrors.end(); it++) {
+        if (*it) errors.push_back(new E(**it));
+    }
+
+    success = false;
+    value = NULL;
+}
+
+
+template<typename T, typename E>
+CResult<T*, E>::CResult(const CResult<T*, E> &other) {                                                                  //  Konstruktor kopiujący
+    copyResult(other);
+}
+
+
+template<typename T, typename E>
+CResult<T*, E>::~CResult() {                                                                                            //  Destruktor
+    clear();
+}
+
+
+template<typename T, typename E>
+CResult<T*, E>& CResult<T*, E>::operator=(const CResult<T*, E> &other) {                                                //  Operator przypisania
+    if (this != &other) {
+        clear();
+        copyResult(other);
+    }
+
+    return *this;                                                                                                       //  Zwrócenie wyniku
+}
+
+
+template<typename T, typename E>
+template<typename TOther>
+CResult<TOther*, E> CResult<T*, E>::toResult(TOther *newValue) {
+    if (success) return CResult<TOther*, E>(newValue);
+
+    delete newValue;
+
+    return CResult<TOther*, E>(errors);
+}
+
+
+
+template<typename T, typename E>
+bool CResult<T*, E>::isSuccess() {
+    return success;
+}
+
+
+template<typename T, typename E>
+T* CResult<T*, E>::getValue() {
+    return (success && value) ? value : NULL;
+}
+
+
+template<typename T, typename E>
+std::vector<E*>& CResult<T*, E>::getErrors() {
+    return errors;
+}
+
+
+template<typename T, typename E>
+void CResult<T*, E>::copyResult(const CResult<T*, E> &other) {                                                          //  Kopiowanie zawartości wyniku
+    if (other.value) {
+        value = new T(*other.value);
+    }
+    else {
+        value = NULL;
+    }
+
+    for (typename std::vector<E*>::const_iterator it = other.errors.begin(); it != other.errors.end(); it++) {
+        if (*it) errors.push_back(new E(**it));
+    }
+
+    success = other.success;
+}
+
+
+template<typename T, typename E>
+void CResult<T *, E>::clear() {
+    delete value;
+    value = NULL;
+
+    for (typename std::vector<E*>::iterator it = errors.begin(); it != errors.end(); it++) {
+        if (*it) delete *it;
+    }
+
+    errors.clear();
+}
+
 
 #endif //CRESULT_H
