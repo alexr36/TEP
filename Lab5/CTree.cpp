@@ -29,17 +29,16 @@ CTree::CTree(const CTree &other) {
 CTree::CTree(CTree &&other) {
     move_count++;
     std::cout << "Konstruktor przenoszący wywołany: " << move_count << " razy.\n";
-
-    root = other.root;
-    other.root = NULL;
     copy(other);
-    other.variable_count = 0;
 }
 
 
 void CTree::copy(CTree &other) {
+    root = other.root;
+    other.root = NULL;
     variable_count = other.variable_count;
     variable_names = other.variable_names;
+    other.variable_count = 0;
 }
 
 
@@ -71,12 +70,7 @@ CTree& CTree::operator=(CTree &&other) {
     if (this != &other) {
         delete root;
 
-        root = other.root;
-        variable_count = other.variable_count;
-        variable_names = std::move(other.variable_names);
-
-        other.root = NULL;
-        other.variable_count = 0;
+        copy(other);
     }
 
     return *this;
