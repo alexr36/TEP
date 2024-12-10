@@ -101,10 +101,13 @@ CTree CTree::operator+(const CTree &other) {
     //  Aktualizacja korzenia i zbioru zmiennych
     newTree.root = newRoot;
 
-    newTree.variable_count = result.size();
-    newTree.variable_names = result;
+    //newTree.variable_count = result.size();
+    //newTree.variable_names = result;
+    newTree.variable_names.assign(unique_variables.begin(), unique_variables.end());
+    newTree.variable_count = newTree.variable_names.size();
 
-    return newTree;
+    //return newTree;
+    return std::move(newTree);
 }
 
 
