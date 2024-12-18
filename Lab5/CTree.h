@@ -13,9 +13,10 @@ class CTree {
         CTree(CTree &&other);                                                                                           //  Konstruktor przenoszący
         ~CTree();                                                                                                       //  Destruktor
 
-        CTree operator=(const CTree &other);                                                                           //  Operator przypisania
+        CTree operator=(const CTree &other);                                                                            //  Operator przypisania
         CTree& operator=(CTree &&other);                                                                                //  Operator przeniesienia
         CTree operator+(const CTree &other);                                                                            //  Operator dodawania
+        CTree operator+(CTree &&other);
 
         CResult<CTree, CError> enter(const std::string &formula);                                                       //  Wprowadzanie formuły
         void printPrefix();                                                                                             //  Wyświetlanie drzewa - wariant prefix
@@ -40,8 +41,9 @@ class CTree {
         bool isBinaryOperator(const std::string &token);                                                                //  Sprawdzenie czt symbol jest operatorem binarnym
         CNode* findNodeNeedingChild(CNode* node);                                                                       //  Wyszukiwanie węzłów bez wszystkich potomków
         std::string doubleToString(double &value);
-        void copy(CTree &other);
+        void move(CTree &other);
         void copy(const CTree &other);
+        CTree add(const CTree &other);
 
         CNode* root;                                                                                                    //  Korzeń drzewa
         int variable_count;                                                                                             //  Licznik zmiennych w drzewie

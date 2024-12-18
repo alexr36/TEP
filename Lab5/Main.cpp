@@ -1,6 +1,25 @@
 #include <iostream>
 #include "/Users/alexrogozinski/CLionProjects/TEP/Lab/Lab3act/CTree.h"
 
+//  --  Modyfikacja ----------------------------------------------------------------------------------------------------
+
+void printChain(int &&chain_len) {
+    for (int i = 0; i < chain_len * 2; i++) {
+        std::cout << "*- ";
+    }
+
+    std::cout << "\n";
+}
+
+void printChain(int &chain_len) {
+    for (int i = 0; i < chain_len; i++) {
+        std::cout << "*- ";
+    }
+
+    std::cout << "\n";
+}
+
+
 int main() {
     CTree tree1;
     tree1.enter("+ * 3 2 x");
@@ -64,9 +83,34 @@ int main() {
         tempTree.enter("+ x " + std::to_string(i));
         tree8 = std::move(tempTree);  // Move-assignment w pętli
     }
+
     std::cout << "\nTree 8 po 10 iteracjach przeniesienia: ";
     tree8.printPrefix();
     std::cout << "\nZmienne w Tree 8: " << tree8.vars() << "\n";
+
+    std::cout << "\nTree 8: ";
+    tree8.printPrefix();
+
+    std::cout << "\nTree 7: ";
+    tree7.printPrefix();
+
+    std::cout << "\nTree 6: ";
+    tree6.printPrefix();
+
+    std::cout << "\nTree 9 (Tree 8 + Tree 7 + Tree 6): ";
+    CTree tree9 = tree8 + tree7 + tree6;
+    tree9.printPrefix();
+
+
+    //  --  Modyfikacja ------------------------------------------------------------------------------------------------
+
+    std::cout << "\nModyfikacja:\n";
+    int val = 5;
+    std::cout << "Oczekiwane 6 lancuchow: ";
+    printChain(3);             //  Duplikowanie wartosci podanej czyli łańcuch 6-elementowy
+
+    std::cout << "Oczekiwane 5 lancuchow: ";
+    printChain(val);        //  Normalnie, 5 elementów
 
     return 0;
 }

@@ -3,9 +3,6 @@
 #include <sstream>
 #include <unordered_set>
 
-int copy_count = 0;
-int move_count = 0;
-
 //  Konstruktor domyślny
 CTree::CTree() {
     root = NULL;
@@ -15,9 +12,6 @@ CTree::CTree() {
 
 //  Konstruktor kopiujący
 CTree::CTree(const CTree &other) {
-    copy_count++;
-    std::cout << "Konstruktor kopiujący wywołany: " << copy_count << " razy.\n";
-
     root = NULL;
     copy(other);
 
@@ -27,13 +21,11 @@ CTree::CTree(const CTree &other) {
 
 //  Konstruktor przenoszący
 CTree::CTree(CTree &&other) {
-    move_count++;
-    std::cout << "Konstruktor przenoszący wywołany: " << move_count << " razy.\n";
-    copy(other);
+    move(other);
 }
 
 
-void CTree::copy(CTree &other) {
+void CTree::move(CTree &other) {
     root = other.root;
     other.root = NULL;
     variable_count = other.variable_count;
@@ -70,7 +62,7 @@ CTree& CTree::operator=(CTree &&other) {
     if (this != &other) {
         delete root;
 
-        copy(other);
+        move(other);
     }
 
     return *this;
@@ -79,8 +71,40 @@ CTree& CTree::operator=(CTree &&other) {
 
 //  Operator dodawania
 CTree CTree::operator+(const CTree &other) {
-    CTree newTree;
+    CTree newTree = add(other);
     COperatorNode* newRoot = new COperatorNode(ADDING_OPERATOR, BINARY_OPERATOR_ARGS_COUNT, BINARY_OPERATOR_ARGS_COUNT);
+
+    //  Ustawienie odpowiednich potomków dla nowego korzenia
+    newRoot->setChild(0, (root != NULL) ? root->copyNode() : NULL);
+    newRoot->setChild(1, (other.root != NULL) ? other.root->copyNode() : NULL);
+
+    //  Aktualizacja korzenia i zbioru zmiennych
+    newTree.root = newRoot;
+
+    return std::move(newTree);
+}
+
+
+//  Operator dodawania
+CTree CTree::operator+(CTree &&other) {
+    CTree newTree = add(other);
+    COperatorNode* newRoot = new COperatorNode(ADDING_OPERATOR, BINARY_OPERATOR_ARGS_COUNT, BINARY_OPERATOR_ARGS_COUNT);
+
+    //  Ustawienie odpowiednich potomków dla nowego korzenia
+    newRoot->setChild(0, root);
+    newRoot->setChild(1, other.root);
+
+    other.root = NULL;
+
+    //  Aktualizacja korzenia i zbioru zmiennych
+    newTree.root = newRoot;
+
+    return std::move(newTree);
+}
+
+
+CTree CTree::add(const CTree &other) {
+    CTree newTree;
 
     // Unikalne zmienne - najpierw zbieramy zmienne w zbiór
     std::set<std::string> unique_variables;
@@ -94,21 +118,12 @@ CTree CTree::operator+(const CTree &other) {
         result.push_back(*it);
     }
 
-    //  Ustawienie odpowiednich potomków dla nowego korzenia
-    newRoot->setChild(0, (root != NULL) ? root->copyNode() : NULL);
-    newRoot->setChild(1, (other.root != NULL) ? other.root->copyNode() : NULL);
+    newTree.variable_count = result.size();
+    newTree.variable_names = result;
 
-    //  Aktualizacja korzenia i zbioru zmiennych
-    newTree.root = newRoot;
-
-    //newTree.variable_count = result.size();
-    //newTree.variable_names = result;
-    newTree.variable_names.assign(unique_variables.begin(), unique_variables.end());
-    newTree.variable_count = newTree.variable_names.size();
-
-    //return newTree;
-    return std::move(newTree);
+    return newTree;
 }
+
 
 
 //  Wprowadzanie formuły
