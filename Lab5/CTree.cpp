@@ -47,7 +47,7 @@ CTree::~CTree() {
 
 
 //  Operator przypisania
-CTree CTree::operator=(const CTree &other) {
+CTree& CTree::operator=(const CTree &other) {
     if (this != &other) {                                                                                               //  Zabezpieczenie przed samoprzypisaniem
         delete root;
         root = (other.root != NULL) ? other.root->copyNode() : NULL;
