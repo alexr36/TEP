@@ -13,7 +13,7 @@ class CTree {
         CTree(CTree &&other);                                                                                           //  Konstruktor przenoszący
         ~CTree();                                                                                                       //  Destruktor
 
-        CTree operator=(const CTree &other);                                                                            //  Operator przypisania
+        CTree& operator=(const CTree &other);                                                                            //  Operator przypisania
         CTree& operator=(CTree &&other);                                                                                //  Operator przeniesienia
         CTree operator+(const CTree &other);                                                                            //  Operator dodawania
         CTree operator+(CTree &&other);
