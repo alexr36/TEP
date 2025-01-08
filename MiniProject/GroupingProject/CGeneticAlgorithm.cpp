@@ -50,6 +50,10 @@ void CGeneticAlgorithm::initializePopulation() {
 
 
 void CGeneticAlgorithm::evaluatePopulation() {
+    if (population.empty()) {
+        return;
+    }
+
     for (int i = 0; i < population.size(); i++) {
         population[i].calculateFitness(evaluator);
     }
@@ -108,6 +112,10 @@ void CGeneticAlgorithm::createNextPopulation() {
 
 
 CIndividual& CGeneticAlgorithm::selectParent() {
+    if (population.empty()) {
+        return *(new CIndividual());
+    }
+
     int parent_1_index = rand() % pop_size;
     int parent_2_index = rand() % pop_size;
 
@@ -122,7 +130,7 @@ CIndividual& CGeneticAlgorithm::selectParent() {
 }
 
 
-void CGeneticAlgorithm::addIndividualsToPop(vector<CIndividual> &destination, CIndividual &individual_1, CIndividual &individual_2) {
+void CGeneticAlgorithm::addIndividualsToPop(vector<CIndividual> &destination, const CIndividual &individual_1, const CIndividual &individual_2) {
     destination.push_back(individual_1);
 
     if (destination.size() < pop_size) {

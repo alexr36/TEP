@@ -34,7 +34,7 @@ class CGeneticAlgorithm {
         void evaluatePopulation();
         void createNextPopulation();
         CIndividual& selectParent();
-        void addIndividualsToPop(vector<CIndividual> &destination, CIndividual &individual_1, CIndividual &individual_2);
+        void addIndividualsToPop(vector<CIndividual> &destination, const CIndividual &individual_1, const CIndividual &individual_2);
         void pickStartingIndividual();
         void adjustPopSize(const int &popSize);
 };
