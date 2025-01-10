@@ -21,13 +21,6 @@ CIndividual::~CIndividual() {}
 
 //  ==  Public methods  ================================================================================================
 
-double CIndividual::calculateFitness(NGroupingChallenge::CGroupingEvaluator &evaluator) {
-    fitness = evaluator.dEvaluate(genotype);
-
-    return fitness;
-}
-
-
 void CIndividual::mutate(double mutProb, int groupsAmount) {
     for (int &gene : genotype) {
         if ((double)rand() / RAND_MAX < mutProb) {
@@ -64,8 +57,16 @@ pair<CIndividual, CIndividual> CIndividual::crossover(const CIndividual &other) 
 }
 
 
+double CIndividual::calculateFitness(NGroupingChallenge::CGroupingEvaluator &evaluator) {
+    fitness = evaluator.dEvaluate(genotype);
+
+    return fitness;
+}
+
+
 //  ==  Private methods  ===============================================================================================
 
+//  Adds two genotype vectors to one bigger genotype vector
 vector<int> CIndividual::combineGenotypes(vector<int> genotype_1, vector<int> genotype_2) {
     vector<int> genotypes_combined = genotype_1;
     genotypes_combined.insert(genotypes_combined.end(), genotype_2.begin(), genotype_2.end());

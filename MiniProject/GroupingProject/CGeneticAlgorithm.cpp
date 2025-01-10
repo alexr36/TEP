@@ -28,6 +28,7 @@ void CGeneticAlgorithm::run() {
     evaluatePopulation();
 
     for (int i = 0; i < max_iterations; i++) {
+        std::cout << "Iteration " << i << "\n";
         createNextPopulation();
     }
 

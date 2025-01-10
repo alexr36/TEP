@@ -5,12 +5,15 @@
 
 class CGeneticAlgorithm {
     public:
+        //  Constructors
         CGeneticAlgorithm(int popSize, double crossProb, double mutProb, NGroupingChallenge::CGroupingEvaluator &groupingEvaluator, int maxIterations);
         ~CGeneticAlgorithm();
 
+        //  Public methods
         void initialize();
         void run();
 
+        //  Getters
         int getMaxIterations() const;
         int getPopSize() const;
         double getCrossProb() const;
@@ -21,6 +24,7 @@ class CGeneticAlgorithm {
         NGroupingChallenge::CGroupingEvaluator getEvaluator() const;
 
     private:
+        //  Class fields
         int max_iterations;
         int pop_size;
         double cross_prob;
@@ -30,6 +34,7 @@ class CGeneticAlgorithm {
         vector<CIndividual> population;
         NGroupingChallenge::CGroupingEvaluator evaluator;
 
+        //  Aux methods
         void initializePopulation();
         void evaluatePopulation();
         void createNextPopulation();

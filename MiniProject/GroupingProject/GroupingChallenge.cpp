@@ -32,7 +32,7 @@ int main()
 	// 	c_optimizer.vRunIteration();
 	// }
 
-	CGeneticAlgorithm ga(180, 0.84, 0.17, *pc_evaluator, 100000);
+	CGeneticAlgorithm ga(1300, 0.84, 0.17, *pc_evaluator, 100000);
 	ga.run();
 
 	delete pc_evaluator;
