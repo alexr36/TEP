@@ -7,7 +7,7 @@ using namespace NGroupingChallenge;
 
 int main()
 {
-	CGaussianGroupingEvaluatorFactory c_evaluator_factory(5, 100);
+	CGaussianGroupingEvaluatorFactory c_evaluator_factory(5, 100, 5);
 
 	c_evaluator_factory
 		.cAddDimension(-100, 100, 1.0, 1.0)
@@ -32,7 +32,7 @@ int main()
 	// 	c_optimizer.vRunIteration();
 	// }
 
-	CGeneticAlgorithm ga(20, 0.84, 0.17, *pc_evaluator, 100);
+	CGeneticAlgorithm ga(100, 0.84, 0.17, *pc_evaluator, 100000);
 	ga.run();
 
 	delete pc_evaluator;
