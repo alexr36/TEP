@@ -76,10 +76,9 @@ long double CTimeSpan::convertToYears() const {
 
 
 std::string CTimeSpan::toString() {
-    return "[" + convertToString(days)
-            + " day(s), " + convertToString(hours)
-            + " hour(s), " + convertToString(minutes)
-            + " minute(s)]";
+    return "[" + convertToString(days) + " day(s), "
+            + convertToString(hours) + " hour(s), "
+            + convertToString(minutes) + " minute(s)]";
 }
 
 
