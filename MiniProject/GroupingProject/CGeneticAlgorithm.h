@@ -20,7 +20,7 @@ class CGeneticAlgorithm {
         double getMutProb() const;
         double getCurrentBestFitness() const;
         CIndividual getCurrentBestIndividual() const;
-        vector<CIndividual> getPopulation() const;
+        vector<CIndividual>& getPopulation();
         NGroupingChallenge::CGroupingEvaluator getEvaluator() const;
 
     private:
@@ -37,11 +37,13 @@ class CGeneticAlgorithm {
         //  Aux methods
         void initializePopulation();
         void evaluatePopulation();
+        void mutatePopulation();
         void createNextPopulation();
         CIndividual& selectParent();
         void addIndividualsToPop(vector<CIndividual> &destination, const CIndividual &individual_1, const CIndividual &individual_2);
         void pickStartingIndividual();
         void adjustPopSize(const int &popSize);
+        static bool compareIndividuals(const CIndividual &ind1, const CIndividual &ind2);
 };
 
 

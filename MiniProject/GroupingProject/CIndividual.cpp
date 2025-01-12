@@ -11,8 +11,8 @@ CIndividual::CIndividual() {
 CIndividual::CIndividual(int pointsAmount, int groupsAmount) {
     genotype.resize(pointsAmount);
 
-    for (int &gene : genotype) {
-        gene = rand() % groupsAmount + 1;
+    for (int i = 0; i < genotype.size(); i++) {
+        genotype[i] = rand() % groupsAmount + 1;
     }
 }
 
@@ -22,15 +22,16 @@ CIndividual::~CIndividual() {}
 //  ==  Public methods  ================================================================================================
 
 void CIndividual::mutate(double mutProb, int groupsAmount) {
-    for (int &gene : genotype) {
-        if ((double)rand() / RAND_MAX < mutProb) {
-            int new_gene = rand() % groupsAmount + 1;
+    for (int i = 0; i < genotype.size(); i++) {
+        if ((double)rand() / (double)RAND_MAX < mutProb) {
+            int new_gene;
 
-            while (gene == new_gene) {
+            do {
                 new_gene = rand() % groupsAmount + 1;
             }
+            while (genotype[i] == new_gene);
 
-            gene = new_gene;
+            genotype[i] = new_gene;
         }
     }
 }
@@ -68,7 +69,10 @@ double CIndividual::calculateFitness(NGroupingChallenge::CGroupingEvaluator &eva
 
 //  Adds two genotype vectors to one bigger genotype vector
 vector<int> CIndividual::combineGenotypes(vector<int> genotype_1, vector<int> genotype_2) {
-    vector<int> genotypes_combined = genotype_1;
+    vector<int> genotypes_combined;
+    genotypes_combined.reserve(genotype_1.size() + genotype_2.size());
+
+    genotypes_combined.insert(genotypes_combined.end(), genotype_1.begin(), genotype_1.end());
     genotypes_combined.insert(genotypes_combined.end(), genotype_2.begin(), genotype_2.end());
 
     return genotypes_combined;
@@ -76,8 +80,8 @@ vector<int> CIndividual::combineGenotypes(vector<int> genotype_1, vector<int> ge
 
 
 void CIndividual::printGenotype() {
-    for (int &gene : genotype) {
-        cout << gene << " ";
+    for (int i = 0; i < genotype.size(); i++) {
+        cout << genotype[i] << " ";
     }
     cout << "\n";
 }
