@@ -6,12 +6,14 @@
 class CGeneticAlgorithm {
     public:
         //  Constructors
-        CGeneticAlgorithm(int popSize, double crossProb, double mutProb, NGroupingChallenge::CGroupingEvaluator &groupingEvaluator, int maxIterations);
+        CGeneticAlgorithm(NGroupingChallenge::CGroupingEvaluator &groupingEvaluator);
         ~CGeneticAlgorithm();
 
         //  Public methods
         void initialize();
         void run();
+        void runIteration(int iter);
+        void printBestSolutionInfo();
 
         //  Getters
         int getMaxIterations() const;
@@ -20,8 +22,15 @@ class CGeneticAlgorithm {
         double getMutProb() const;
         double getCurrentBestFitness() const;
         CIndividual getCurrentBestIndividual() const;
+        std::pair<CIndividual, double> getBestSolution() const;
         vector<CIndividual>& getPopulation();
         NGroupingChallenge::CGroupingEvaluator getEvaluator() const;
+
+        //  Setters
+        void setPopSize(int popSize);
+        void setCrossProb(double crossProb);
+        void setMutProb(double mutProb);
+        void setMaxIterations(int maxIterations);
 
     private:
         //  Class fields
@@ -37,6 +46,7 @@ class CGeneticAlgorithm {
         //  Aux methods
         void initializePopulation();
         void evaluatePopulation();
+        void crossoverPopulation(std::vector<CIndividual> &newPopulation);
         void mutatePopulation();
         void createNextPopulation();
         CIndividual& selectParent();

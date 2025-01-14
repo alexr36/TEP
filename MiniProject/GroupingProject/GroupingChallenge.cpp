@@ -32,7 +32,11 @@ int main()
 	// 	c_optimizer.vRunIteration();
 	// }
 
-	CGeneticAlgorithm ga(300, 0.84, 0.17, *pc_evaluator, 100000);
+	CGeneticAlgorithm ga(*pc_evaluator);
+	ga.setPopSize(300);
+	ga.setCrossProb(0.84);
+	ga.setMutProb(0.17);
+	ga.setMaxIterations(10000);
 	ga.run();
 
 	delete pc_evaluator;

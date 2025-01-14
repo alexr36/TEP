@@ -13,11 +13,12 @@ class CIndividual {
 
         //  Public methods
         void mutate(double mutProb, int groupsAmount);
-        std::pair<CIndividual, CIndividual> crossover(const CIndividual& other);
+        std::pair<CIndividual, CIndividual> crossover(const CIndividual& other, double crossProb);
         double calculateFitness(NGroupingChallenge::CGroupingEvaluator &evaluator);
+        std::string toString();
 
         //  Getters
-        vector<int> getGenotype() const;
+        vector<int>& getGenotype();
         double getFitness() const;
 
     private:

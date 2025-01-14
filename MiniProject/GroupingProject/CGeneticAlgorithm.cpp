@@ -4,13 +4,8 @@
 
 //  ==  Constructors  ==================================================================================================
 
-CGeneticAlgorithm::CGeneticAlgorithm(int popSize, double crossProb, double mutProb, NGroupingChallenge::CGroupingEvaluator &groupingEvaluator, int maxIterations)
-    : evaluator(groupingEvaluator) {
-    cross_prob = crossProb;
-    mut_prob = mutProb;
-    max_iterations = maxIterations;
-    adjustPopSize(popSize);
-}
+CGeneticAlgorithm::CGeneticAlgorithm(NGroupingChallenge::CGroupingEvaluator &groupingEvaluator)
+    : evaluator(groupingEvaluator) {}
 
 
 CGeneticAlgorithm::~CGeneticAlgorithm() {}
@@ -28,11 +23,27 @@ void CGeneticAlgorithm::run() {
     evaluatePopulation();
 
     for (int i = 0; i < max_iterations; i++) {
-        std::cout << "Iteration " << i << "\n";
-        createNextPopulation();
+        runIteration(i);
     }
 
     cout << "Resultant best fitness: " << current_best_individual.getFitness() << endl;
+}
+
+
+void CGeneticAlgorithm::runIteration(int iter) {
+    std::cout << "Iteration " << iter << "\n";
+    createNextPopulation();
+    evaluatePopulation();
+}
+
+
+
+void CGeneticAlgorithm::printBestSolutionInfo() {
+    std::pair<CIndividual, double> result = getBestSolution();
+
+    std::cout << "Current best solution:\n"
+        << "Genotype: " << result.first.toString() << "\n"
+        << "Fitness: " << result.second << "\n";
 }
 
 
@@ -59,16 +70,30 @@ void CGeneticAlgorithm::evaluatePopulation() {
         population[i].calculateFitness(evaluator);
     }
 
-    auto bestIter = std::min_element(population.begin(), population.end(), compareIndividuals);
+    auto best_iter = std::min_element(population.begin(), population.end(), compareIndividuals);
 
-    if (bestIter != population.end()) {
-        if (current_best_fitness > bestIter->getFitness()) {
-            current_best_individual = *bestIter;
+    if (best_iter != population.end()) {
+        if (current_best_fitness > best_iter->getFitness()) {
+            current_best_individual = *best_iter;
             current_best_fitness = current_best_individual.getFitness();
         }
     }
 
-    std::cout << "Current best fitness: " << current_best_fitness << "\n";
+    //std::cout << "Current best fitness: " << current_best_fitness << "\n";
+    printBestSolutionInfo();
+}
+
+
+void CGeneticAlgorithm::crossoverPopulation(std::vector<CIndividual>& newPopulation) {
+
+    while (newPopulation.size() < pop_size) {
+        CIndividual parent_1 = selectParent();
+        CIndividual parent_2 = selectParent();
+
+        pair<CIndividual, CIndividual> children = parent_1.crossover(parent_2, cross_prob);
+
+        addIndividualsToPop(newPopulation, children.first, children.second);
+    }
 }
 
 
@@ -82,30 +107,19 @@ void CGeneticAlgorithm::mutatePopulation() {
     }
 }
 
-
-
+/*
+ *  1. - Crossover
+ *  2. - Evaluation
+ *  3. - Mutation
+ *  4. - Evaluation
+*/
 void CGeneticAlgorithm::createNextPopulation() {
     vector<CIndividual> new_population;
 
-    //  1. - Crossover
-    //  2. - Evaluation
-    //  3. - Mutation
-    //  4. - Evaluation
-    while (new_population.size() < pop_size) {
-        CIndividual parent_1 = selectParent();
-        CIndividual parent_2 = selectParent();
+    //  1.
+    crossoverPopulation(new_population);
 
-        if ((double)rand() / (double)RAND_MAX < cross_prob) {
-
-            //  1.
-            pair<CIndividual, CIndividual> children = parent_1.crossover(parent_2);
-
-            addIndividualsToPop(new_population, children.first, children.second);
-        }
-        else {
-            addIndividualsToPop(new_population, parent_1, parent_2);
-        }
-    }
+    population = new_population;
 
     //  2.
     evaluatePopulation();
@@ -114,9 +128,7 @@ void CGeneticAlgorithm::createNextPopulation() {
     mutatePopulation();
 
     //  4.
-    evaluatePopulation();
-
-    population = new_population;
+    //evaluatePopulation();
 }
 
 
@@ -190,10 +202,36 @@ CIndividual CGeneticAlgorithm::getCurrentBestIndividual() const {
     return current_best_individual;
 }
 
+std::pair<CIndividual, double> CGeneticAlgorithm::getBestSolution() const {
+    return make_pair(current_best_individual, current_best_fitness);
+}
+
+
 vector<CIndividual>& CGeneticAlgorithm::getPopulation() {
     return population;
 }
 
 NGroupingChallenge::CGroupingEvaluator CGeneticAlgorithm::getEvaluator() const {
     return evaluator;
+}
+
+
+//  ==  Setters  =======================================================================================================
+
+void CGeneticAlgorithm::setPopSize(int popSize) {
+    pop_size = popSize;
+    adjustPopSize(pop_size);
+}
+
+void CGeneticAlgorithm::setCrossProb(double crossProb) {
+    cross_prob = crossProb;
+}
+
+void CGeneticAlgorithm::setMutProb(double mutProb) {
+    mut_prob = mutProb;
+}
+
+
+void CGeneticAlgorithm::setMaxIterations(int maxIterations) {
+    max_iterations = maxIterations;
 }

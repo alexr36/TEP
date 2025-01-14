@@ -1,6 +1,7 @@
 #include "CIndividual.h"
 
 #include <iostream>
+#include <sstream>
 
 //  ==  Constructors  ==================================================================================================
 
@@ -37,14 +38,19 @@ void CIndividual::mutate(double mutProb, int groupsAmount) {
 }
 
 
-pair<CIndividual, CIndividual> CIndividual::crossover(const CIndividual &other) {
+pair<CIndividual, CIndividual> CIndividual::crossover(const CIndividual &other, double crossProb) {
     CIndividual child_1 = *this;
     CIndividual child_2 = other;
 
+    if ((double)rand() / (double)RAND_MAX >= crossProb) {
+        return make_pair(child_1, child_2);
+    }
+
     vector<int> genotypes_combined = combineGenotypes(genotype, other.genotype);
 
-    for (int &gene : genotypes_combined) {
+    for (int i = 0; i < genotypes_combined.size(); i++) {
         int child_id = rand() % 2 + 1;
+        int gene = genotypes_combined[i];
 
         if (child_id == 1 && child_1.genotype.size() < genotype.size()) {
             child_1.genotype.push_back(gene);
@@ -63,6 +69,18 @@ double CIndividual::calculateFitness(NGroupingChallenge::CGroupingEvaluator &eva
 
     return fitness;
 }
+
+
+std::string CIndividual::toString() {
+    std::stringstream ss;
+
+    for (int i = 0; i < genotype.size(); i++) {
+        ss << genotype[i] << " ";
+    }
+
+    return ss.str();
+}
+
 
 
 //  ==  Private methods  ===============================================================================================
@@ -93,6 +111,6 @@ double CIndividual::getFitness() const {
     return fitness;
 }
 
-vector<int> CIndividual::getGenotype() const {
+vector<int>& CIndividual::getGenotype() {
     return genotype;
 }
