@@ -106,7 +106,6 @@ void CGeneticAlgorithm::mutatePopulation() {
  *  1. - Crossover
  *  2. - Evaluation
  *  3. - Mutation
- *  4. - Evaluation
 */
 void CGeneticAlgorithm::createNextPopulation() {
     vector<CIndividual> new_population;
