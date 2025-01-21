@@ -131,7 +131,6 @@ void CIndividual::swap(int &start_index, int &end_index) {
 }
 
 
-
 //  ==  Getters  =======================================================================================================
 
 double CIndividual::getFitness() const {
