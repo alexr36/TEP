@@ -16,4 +16,5 @@ add_executable(GroupingProject2 GroupingChallenge.cpp
         CIndividual.h
         CGeneticAlgorithm.cpp
         CGeneticAlgorithm.h
+        Constants.h
 )
