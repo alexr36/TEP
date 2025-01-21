@@ -1,4 +1,6 @@
 #include "Optimizer.h"
+#include "CGeneticAlgorithm.h"
+#include "Constants.h"
 
 using namespace NGroupingChallenge;
 
@@ -9,33 +11,55 @@ COptimizer::COptimizer(CGroupingEvaluator& cEvaluator)
 	c_random_engine.seed(c_seed_generator());
 }
 
+COptimizer::~COptimizer() {
+	if (genetic_algorithm != nullptr) {
+		delete genetic_algorithm;
+		genetic_algorithm = nullptr;
+	}
+}
+
 void COptimizer::vInitialize()
 {
-	numeric_limits<double> c_double_limits;
-	d_current_best_fitness = c_double_limits.max();
-
-	v_current_best.clear();
-	v_current_best.resize(c_evaluator.iGetNumberOfPoints());
+	iter = 0;
+	d_current_best_fitness = numeric_limits<double>::max();
+	initializeAlgorithm();
+	genetic_algorithm->initializePopulation();
+	genetic_algorithm->evaluatePopulation();
 }
 
 void COptimizer::vRunIteration()
 {
-	vector<int> v_candidate(c_evaluator.iGetNumberOfPoints());
+	iter++;
+	genetic_algorithm->runIteration(iter);
+	v_current_best = genetic_algorithm->getCurrentBestIndividual().getGenotype();
+	d_current_best_fitness = genetic_algorithm->getCurrentBestFitness();
+}
 
-	uniform_int_distribution<int> c_candidate_distribution(c_evaluator.iGetLowerBound(), c_evaluator.iGetUpperBound());
-
-	for (size_t i = 0; i < v_candidate.size(); i++)
-	{
-		v_candidate[i] = c_candidate_distribution(c_random_engine);
+void COptimizer::initializeAlgorithm() {
+	if (genetic_algorithm == nullptr) {
+		genetic_algorithm = new CGeneticAlgorithm(c_evaluator);
 	}
 
-	double d_candidate_fitness = c_evaluator.dEvaluate(v_candidate);
+	genetic_algorithm->setPopSize(DEFAULT_POP_SIZE);
+	genetic_algorithm->setCrossProb(DEFAULT_CROSS_PROB);
+	genetic_algorithm->setMutProb(DEFAULT_MUT_PROB);
+}
 
-	if (d_candidate_fitness < d_current_best_fitness)
-	{
-		v_current_best = v_candidate;
-		d_current_best_fitness = d_candidate_fitness;
+void COptimizer::runAlgorithm(int maxIterations) {
+	if (maxIterations < 1) return;
+
+	vInitialize();
+
+	for (int i = 0; i < maxIterations; i++) {
+		vRunIteration();
 	}
 
-	cout << d_current_best_fitness << endl;
+	vector<int> best = *pvGetCurrentBest();
+
+	cout << "The best genotype:\n";
+	for (int i = 0; i < best.size(); i++) {
+		cout << best[i] << " ";
+	}
+
+	cout << "\nFitness: " << getCurrentBestFitness();
 }

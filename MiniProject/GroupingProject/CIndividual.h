@@ -1,34 +1,38 @@
 #ifndef CINDIVIDUAL_H
 #define CINDIVIDUAL_H
 #include <vector>
+#include <string>
 #include "GroupingEvaluator.h"
 
 
 class CIndividual {
-    public:
-        //  Constructors
-        CIndividual();
-        CIndividual(int pointsAmount, int groupsAmount);
-        ~CIndividual();
+public:
+    //  Constructors
+    CIndividual();
+    CIndividual(int pointsAmount, int groupsAmount);
 
-        //  Public methods
-        void mutate(double mutProb, int groupsAmount);
-        std::pair<CIndividual, CIndividual> crossover(const CIndividual& other, double crossProb);
-        double calculateFitness(NGroupingChallenge::CGroupingEvaluator &evaluator);
-        std::string toString();
+    //  Public methods
+    void mutate(double mutProb, int groupsAmount);
+    std::pair<CIndividual, CIndividual> crossover(const CIndividual& other, double crossProb);
+    double calculateFitness(NGroupingChallenge::CGroupingEvaluator& evaluator);
+    std::string toString();
 
-        //  Getters
-        vector<int>& getGenotype();
-        double getFitness() const;
+    //  Modyfication
+    void mutateAlternative(double mutProb);
 
-    private:
-        //  Class fields
-        vector<int> genotype;
-        double fitness;
+    //  Getters
+    vector<int>& getGenotype();
+    double getFitness() const;
 
-        //  Aux methods
-        vector<int> combineGenotypes(vector<int> genotype_1, vector<int> genotype_2);
-        void printGenotype();
+private:
+    //  Class fields
+    vector<int> genotype;
+    double fitness;
+
+    //  Aux methods
+    vector<int> combineGenotypes(vector<int> genotype_1, vector<int> genotype_2);
+    void printGenotype();
+    void swap(int &start_index, int &end_index);
 };
 
 

@@ -1,32 +1,21 @@
 #include "CGeneticAlgorithm.h"
-
 #include <iostream>
+#include "Constants.h"
 
 //  ==  Constructors  ==================================================================================================
 
-CGeneticAlgorithm::CGeneticAlgorithm(NGroupingChallenge::CGroupingEvaluator &groupingEvaluator)
-    : evaluator(groupingEvaluator) {}
-
-
-CGeneticAlgorithm::~CGeneticAlgorithm() {}
+CGeneticAlgorithm::CGeneticAlgorithm(NGroupingChallenge::CGroupingEvaluator& groupingEvaluator)
+    : evaluator(groupingEvaluator) {
+    initialize();
+}
 
 
 //  ==  Public methods  ================================================================================================
 
 void CGeneticAlgorithm::initialize() {
     current_best_fitness = std::numeric_limits<double>::max();
-}
-
-
-void CGeneticAlgorithm::run() {
-    initializePopulation();
-    evaluatePopulation();
-
-    for (int i = 0; i < max_iterations; i++) {
-        runIteration(i);
-    }
-
-    cout << "Resultant best fitness: " << current_best_individual.getFitness() << endl;
+    current_best_individual = CIndividual();
+    population.clear();
 }
 
 
@@ -35,7 +24,6 @@ void CGeneticAlgorithm::runIteration(int iter) {
     createNextPopulation();
     evaluatePopulation();
 }
-
 
 
 void CGeneticAlgorithm::printBestSolutionInfo() {
@@ -79,7 +67,6 @@ void CGeneticAlgorithm::evaluatePopulation() {
         }
     }
 
-    //std::cout << "Current best fitness: " << current_best_fitness << "\n";
     printBestSolutionInfo();
 }
 
@@ -87,8 +74,8 @@ void CGeneticAlgorithm::evaluatePopulation() {
 void CGeneticAlgorithm::crossoverPopulation(std::vector<CIndividual>& newPopulation) {
 
     while (newPopulation.size() < pop_size) {
-        CIndividual parent_1 = selectParent();
-        CIndividual parent_2 = selectParent();
+        CIndividual &parent_1 = selectParent();
+        CIndividual &parent_2 = selectParent();
 
         pair<CIndividual, CIndividual> children = parent_1.crossover(parent_2, cross_prob);
 
@@ -102,10 +89,18 @@ void CGeneticAlgorithm::mutatePopulation() {
         return;
     }
 
-    for (int i = 0; i < population.size(); i++) {
-        population.at(i).mutate(mut_prob, evaluator.iGetUpperBound());
+    if ((double)rand() / (double)RAND_MAX < DEFAULT_MUT_TYPE_PROB) {
+        for (int i = 0; i < population.size(); i++) {
+            population.at(i).mutate(mut_prob, evaluator.iGetUpperBound());
+        }
+    }
+    else {
+        for (int i = 0; i < population.size(); i++) {
+            population.at(i).mutateAlternative(mut_prob);
+        }
     }
 }
+
 
 /*
  *  1. - Crossover
@@ -126,9 +121,6 @@ void CGeneticAlgorithm::createNextPopulation() {
 
     //  3.
     mutatePopulation();
-
-    //  4.
-    //evaluatePopulation();
 }
 
 
@@ -146,12 +138,12 @@ CIndividual& CGeneticAlgorithm::selectParent() {
     }
 
     return population[parent_1_index].getFitness() <= population[parent_2_index].getFitness()
-            ? population[parent_1_index]
-            : population[parent_2_index];
+        ? population[parent_1_index]
+        : population[parent_2_index];
 }
 
 
-void CGeneticAlgorithm::addIndividualsToPop(vector<CIndividual> &destination, const CIndividual &individual_1, const CIndividual &individual_2) {
+void CGeneticAlgorithm::addIndividualsToPop(vector<CIndividual>& destination, const CIndividual& individual_1, const CIndividual& individual_2) {
     destination.push_back(individual_1);
 
     if (destination.size() < pop_size) {
@@ -161,26 +153,24 @@ void CGeneticAlgorithm::addIndividualsToPop(vector<CIndividual> &destination, co
 
 
 void CGeneticAlgorithm::pickStartingIndividual() {
+    if (population.empty()) return;
+
     current_best_individual = population[0];
     current_best_fitness = current_best_individual.calculateFitness(evaluator);
 }
 
 
-void CGeneticAlgorithm::adjustPopSize(const int &popSize) {
+void CGeneticAlgorithm::adjustPopSize(const int& popSize) {
     pop_size = (popSize % 2 == 0) ? popSize : popSize + 1;
 }
 
 
-bool CGeneticAlgorithm::compareIndividuals(const CIndividual &ind1, const CIndividual &ind2) {
+bool CGeneticAlgorithm::compareIndividuals(const CIndividual& ind1, const CIndividual& ind2) {
     return ind1.getFitness() < ind2.getFitness();
 }
 
 
 //  ==  Getters  =======================================================================================================
-
-int CGeneticAlgorithm::getMaxIterations() const {
-    return max_iterations;
-}
 
 int CGeneticAlgorithm::getPopSize() const {
     return pop_size;
@@ -215,23 +205,32 @@ NGroupingChallenge::CGroupingEvaluator CGeneticAlgorithm::getEvaluator() const {
     return evaluator;
 }
 
+double CGeneticAlgorithm::getMutTypeProb() const {
+    return mutation_type_prob;
+}
+
 
 //  ==  Setters  =======================================================================================================
 
 void CGeneticAlgorithm::setPopSize(int popSize) {
-    pop_size = popSize;
-    adjustPopSize(pop_size);
+    if (popSize < 1) pop_size = DEFAULT_POP_SIZE;
+    else {
+        pop_size = popSize;
+        adjustPopSize(pop_size);
+    }
 }
 
 void CGeneticAlgorithm::setCrossProb(double crossProb) {
-    cross_prob = crossProb;
+    if (crossProb < 0.0) cross_prob = DEFAULT_CROSS_PROB;
+    else cross_prob = crossProb;
 }
 
 void CGeneticAlgorithm::setMutProb(double mutProb) {
-    mut_prob = mutProb;
+    if (mutProb < 0.0) mut_prob = DEFAULT_MUT_PROB;
+    else mut_prob = mutProb;
 }
 
-
-void CGeneticAlgorithm::setMaxIterations(int maxIterations) {
-    max_iterations = maxIterations;
+void CGeneticAlgorithm::setMutTypeProb(double mutationTypeProb) {
+    if (mutationTypeProb < 0.0) mutation_type_prob = DEFAULT_MUT_TYPE_PROB;
+    else mutation_type_prob = mutationTypeProb;
 }

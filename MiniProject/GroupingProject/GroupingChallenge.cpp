@@ -23,21 +23,9 @@ int main()
 
 	CGroupingEvaluator* pc_evaluator = c_evaluator_factory.pcCreateEvaluator(0);
 
-	// COptimizer c_optimizer(*pc_evaluator);
-	//
-	// c_optimizer.vInitialize();
-	//
-	// for (int i = 0; i < 10; i++)
-	// {
-	// 	c_optimizer.vRunIteration();
-	// }
-
-	CGeneticAlgorithm ga(*pc_evaluator);
-	ga.setPopSize(300);
-	ga.setCrossProb(0.84);
-	ga.setMutProb(0.17);
-	ga.setMaxIterations(10000);
-	ga.run();
+	COptimizer c_optimizer(*pc_evaluator);
+	
+	c_optimizer.runAlgorithm(1000);
 
 	delete pc_evaluator;
 

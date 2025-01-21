@@ -2,22 +2,25 @@
 
 #include <iostream>
 #include <sstream>
+#include <string>
 
 //  ==  Constructors  ==================================================================================================
 
 CIndividual::CIndividual() {
     fitness = INT_MAX;
+    genotype.resize(1);
 }
+
 
 CIndividual::CIndividual(int pointsAmount, int groupsAmount) {
-    genotype.resize(pointsAmount);
+    if (pointsAmount > 0 && groupsAmount > 0) {
+        genotype.resize(pointsAmount);
 
-    for (int i = 0; i < genotype.size(); i++) {
-        genotype[i] = rand() % groupsAmount + 1;
+        for (int i = 0; i < genotype.size(); i++) {
+            genotype[i] = rand() % groupsAmount + 1;
+        }
     }
 }
-
-CIndividual::~CIndividual() {}
 
 
 //  ==  Public methods  ================================================================================================
@@ -38,7 +41,24 @@ void CIndividual::mutate(double mutProb, int groupsAmount) {
 }
 
 
-pair<CIndividual, CIndividual> CIndividual::crossover(const CIndividual &other, double crossProb) {
+//  Modification
+void CIndividual::mutateAlternative(double mutProb) {
+    if ((double)rand() / (double)RAND_MAX < mutProb) {
+        int split_index = rand() % genotype.size();
+
+        int start_index = split_index + 1;
+        int end_index = genotype.size() - 1;
+
+        while (start_index < end_index) {
+            swap(start_index, end_index);
+            start_index++;
+            end_index--;
+        }
+    }
+}
+
+
+pair<CIndividual, CIndividual> CIndividual::crossover(const CIndividual& other, double crossProb) {
     CIndividual child_1 = *this;
     CIndividual child_2 = other;
 
@@ -64,7 +84,7 @@ pair<CIndividual, CIndividual> CIndividual::crossover(const CIndividual &other, 
 }
 
 
-double CIndividual::calculateFitness(NGroupingChallenge::CGroupingEvaluator &evaluator) {
+double CIndividual::calculateFitness(NGroupingChallenge::CGroupingEvaluator& evaluator) {
     fitness = evaluator.dEvaluate(genotype);
 
     return fitness;
@@ -80,7 +100,6 @@ std::string CIndividual::toString() {
 
     return ss.str();
 }
-
 
 
 //  ==  Private methods  ===============================================================================================
@@ -103,6 +122,14 @@ void CIndividual::printGenotype() {
     }
     cout << "\n";
 }
+
+
+void CIndividual::swap(int &start_index, int &end_index) {
+    int temp = genotype[start_index];
+    genotype[start_index] = genotype[end_index];
+    genotype[end_index] = temp;
+}
+
 
 
 //  ==  Getters  =======================================================================================================
